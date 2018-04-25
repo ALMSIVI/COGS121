@@ -5,16 +5,81 @@
 <script src="jquery-3.3.1.min.js"></script>
 
 <script type="text/javascript">
-// write your JavaScript code here
+$(document).ready(() => {
+  $('#readOriginal').click(() => {
+    const requestURL = 'songs/' + $('#newSong').val();
+    const originalLyric = $('#lyrics').val();
+    //console.log('read button clicked!');
+    console.log(originalLyric);
+    $.ajax({
+      url: requestURL,
+      type: 'GET',
+      dataType: 'json',
+      success: (data) => {
+        //console.log(data);
+
+        if(data.original) {
+          $('#status').html('Song already exists at URL: ' + requestURL);
+          //$('#jobDiv').html('My job is ' + data.job);
+          //$('#petImage').attr('src', data.pet);
+        } else {
+          $('#status').html('Error: could not find user at URL: ' + requestURL);
+        }
+
+      }
+    });
+
+    $.ajax({
+      url: requestURL,
+      type: "POST",
+      dataType: 'text',
+      data: JSON.stringify(originalLyric),
+      success: (data) => {
+
+        if(data.original) {
+          $('#status').html('Song already exists at URL: ' + requestURL);
+          //$('#jobDiv').html('My job is ' + data.job);
+          //$('#petImage').attr('src', data.pet);
+        } else {
+          $('#status').html('Error: could not find user at URL: ' + requestURL);
+        }
+
+      }
+    });
+
+
+  });
+
+
+  $('#readOriginal').click(() => {
+    $.ajax({
+      url: 'songs/',
+      type: 'GET',
+      dataType: 'json',
+      success: (data) => {
+        //console.log(data);
+        $('#status').html('All users: ' + data);
+      }
+    });
+  });
+});
 </script>
 
 </head>
 <body>
-  <h1>Welcome to PetsApp!</h1>
-
-  Name: <input id="nameBox" type="text" size="20"/>
-  <button id="readButton">Get profile</button>
-  <button id="allUsersButton">Get all usernames</button>
+  <h1>Transracer!</h1>
+  Name of Song: <input type="text" id ="newSong">
+  <div>
+  <textarea id = "lyrics" rows="20" cols="50" name="comment" form="usrform">
+  Enter text here...</textarea>
+  <div>
+  <button id ="readOriginal">Add as Original</button>
+  <button id ="allUsersButton">Add as Tranlated</button>
+  <div>
+  Start Transracing!
+  <div>
+  Enter Song Name: <input type= "text">
+  <button id ="songSelection">Go!</button>
 
   <div id="jobDiv"></div>
   <img id="petImage"></img>
