@@ -8,7 +8,9 @@
 $(document).ready(() => {
   $('#readOriginal').click(() => {
     const requestURL = 'songs/' + $('#newSong').val();
+    const tlyricURL = 'songs/' + $('#newSong').val(); + '/tlyric'
     const originalLyric = $('#lyrics').val();
+    const translatedLyric = $('#translatedlyrics').val();
     //console.log('read button clicked!');
     console.log(originalLyric);
     $.ajax({
@@ -33,7 +35,10 @@ $(document).ready(() => {
       url: requestURL,
       type: "POST",
       dataType: 'text',
-      data: JSON.stringify(originalLyric),
+      data: {
+                'original': originalLyric,
+                'translated': translatedLyric
+            },
       success: (data) => {
 
         if(data.original) {
@@ -46,6 +51,7 @@ $(document).ready(() => {
 
       }
     });
+
 
 
   });
@@ -71,6 +77,8 @@ $(document).ready(() => {
   Name of Song: <input type="text" id ="newSong">
   <div>
   <textarea id = "lyrics" rows="20" cols="50" name="comment" form="usrform">
+  Enter text here...</textarea>
+  <textarea id = "translatedlyrics" rows="20" cols="50" name="comment" form="usrform">
   Enter text here...</textarea>
   <div>
   <button id ="readOriginal">Add as Original</button>
