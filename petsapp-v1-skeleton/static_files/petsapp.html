@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 $(document).ready(() => {
-  $('#readOriginal').click(() => {
+  $('#readLyrics').click(() => {
     const requestURL = 'songs/' + $('#newSong').val();
     const tlyricURL = 'songs/' + $('#newSong').val(); + '/tlyric'
     const originalLyric = $('#lyrics').val();
@@ -56,8 +56,23 @@ $(document).ready(() => {
 
   });
 
+  $('#songSelection').click(() => {
+    const songName = $('#songname').val();
+    const songSelectURL = 'select/' + songName
+    $.ajax({
+      url: songSelectURL,
+      type: 'GET',
+      dataType: 'json',
+      success: (data) => {
+        $('#status').html('Original: \n' + data.original);
+        $('#jobDiv').html('Translated: \n' + data.translated);
+      }
+    })
+  })
 
-  $('#readOriginal').click(() => {
+
+
+  $('#readLyrics').click(() => {
     $.ajax({
       url: 'songs/',
       type: 'GET',
@@ -77,16 +92,15 @@ $(document).ready(() => {
   Name of Song: <input type="text" id ="newSong">
   <div>
   <textarea id = "lyrics" rows="20" cols="50" name="comment" form="usrform">
-  Enter text here...</textarea>
+  Enter original lyrics here...</textarea>
   <textarea id = "translatedlyrics" rows="20" cols="50" name="comment" form="usrform">
-  Enter text here...</textarea>
+  Enter translated lyrics here...</textarea>
   <div>
-  <button id ="readOriginal">Add as Original</button>
-  <button id ="allUsersButton">Add as Tranlated</button>
+  <button id ="readLyrics">Save Song</button>
   <div>
   Start Transracing!
   <div>
-  Enter Song Name: <input type= "text">
+  Enter Song Name: <input type= "text" id = "songname">
   <button id ="songSelection">Go!</button>
 
   <div id="jobDiv"></div>

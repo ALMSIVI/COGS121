@@ -30,6 +30,11 @@ app.get('/songs/:songname', (req, res) => {
   res.send(allSongtitles);
 })
 
+app.get('/select/:songname', (req, res) =>{
+  const songToLookup = req.params.songname;
+  const song = songDatabase[songToLookup];
+  res.send(song);
+})
 app.post('/songs/:songname', (req, res) => {
   const name = req.params.songname;
   songDatabase[name] = {original: req.body.original, translated: req.body.translated};
