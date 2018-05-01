@@ -41,7 +41,6 @@ app.get('/songs/:songname', (req, res) => {
   );
 })
 
-// i believe the issue is here, related to how i moved the index file to a folder /html
 app.get('/select/:songname', (req, res) =>{
   const songToLookup = req.params.songname;
   db.all(
@@ -86,5 +85,5 @@ app.listen(3000, () => {
 });
 
 app.get('/', (req, res) => {
-  res.redirect('/html/LyricApp.html');
+  res.redirect('/LyricApp.html');
 });
