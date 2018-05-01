@@ -75,7 +75,7 @@ app.post('/songs/:songname', (req, res) => {
     {
       $song: name,
       $original: req.body.original,
-      $translated: req.body.original
+      $translated: req.body.translated
     },
     (err) => {
       if(err) {

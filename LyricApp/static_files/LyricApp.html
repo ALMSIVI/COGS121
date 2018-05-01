@@ -34,21 +34,13 @@ $(document).ready(() => {
     $.ajax({
       url: requestURL,
       type: "POST",
-      dataType: 'text',
+      dataType: 'json',
       data: {
                 'original': originalLyric,
                 'translated': translatedLyric
             },
       success: (data) => {
-
-        if(data.original) {
-          $('#status').html('Song already exists at URL: ' + requestURL);
-          //$('#jobDiv').html('My job is ' + data.job);
-          //$('#petImage').attr('src', data.pet);
-        } else {
-          $('#status').html('Error: could not find user at URL: ' + requestURL);
-        }
-
+        //status later
       }
     });
 
@@ -64,8 +56,9 @@ $(document).ready(() => {
       type: 'GET',
       dataType: 'json',
       success: (data) => {
-        $('#status').html('Original: \n' + data.original);
-        $('#jobDiv').html('Translated: \n' + data.translated);
+        console.log(data.original);
+        $('#status').html('Original: \n' + '<pre>' + data.original + '</pre>');
+        $('#jobDiv').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
       }
     })
   })
