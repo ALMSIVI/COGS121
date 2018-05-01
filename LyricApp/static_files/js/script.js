@@ -1,10 +1,3 @@
-<html>
-<head>
-<title>LyricApp</title>
-
-<script src="jquery-3.3.1.min.js"></script>
-
-<script type="text/javascript">
 $(document).ready(() => {
   $('#readLyrics').click(() => {
     const requestURL = 'songs/' + $('#newSong').val();
@@ -27,7 +20,6 @@ $(document).ready(() => {
         } else {
           $('#status').html('Error: could not find user at URL: ' + requestURL);
         }
-
       }
     });
 
@@ -43,11 +35,8 @@ $(document).ready(() => {
         //status later
       }
     });
-
-
-
   });
-
+  
   $('#songSelection').click(() => {
     const songName = $('#songname').val();
     const songSelectURL = 'select/' + songName
@@ -57,14 +46,12 @@ $(document).ready(() => {
       dataType: 'json',
       success: (data) => {
         console.log(data.original);
-        $('#status').html('Original: \n' + '<pre>' + data.original + '</pre>');
-        $('#jobDiv').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
+        $('#originalarea').html('Original: \n' + '<pre>' + data.original + '</pre>');
+        $('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
       }
     })
   })
-
-
-
+  
   $('#readLyrics').click(() => {
     $.ajax({
       url: 'songs/',
@@ -77,30 +64,3 @@ $(document).ready(() => {
     });
   });
 });
-</script>
-
-</head>
-<body>
-  <h1>Transracer!</h1>
-  Name of Song: <input type="text" id ="newSong">
-  <div>
-  <textarea id = "lyrics" rows="20" cols="50" name="comment" form="usrform">
-  Enter original lyrics here...</textarea>
-  <textarea id = "translatedlyrics" rows="20" cols="50" name="comment" form="usrform">
-  Enter translated lyrics here...</textarea>
-  <div>
-  <button id ="readLyrics">Save Song</button>
-  <div>
-  Start Transracing!
-  <div>
-  Enter Song Name: <input type= "text" id = "songname">
-  <button id ="songSelection">Go!</button>
-
-  <div id="jobDiv"></div>
-  <img id="petImage"></img>
-
-  <hr/>
-
-  <div id="status"></div>
-</body>
-</html>
