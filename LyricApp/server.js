@@ -1,16 +1,21 @@
-const express = require('express')
-var bodyParser = require('body-parser')
+// Express stuff
+const express = require('express');
 const app = express();
+app.use(express.static('static_files'));
+app.use(express.bodyParser());
 
+// Other required packages
+const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('Transracer.db');
 
-app.use(express.static('static_files'));
-app.use(express.bodyParser());
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
+// GET requests
 app.get('/songs', (req, res) => {
   db.all('SELECT song FROM songs_to_lyrics', (err, rows) => {
     console.log(rows);
