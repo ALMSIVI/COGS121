@@ -1,16 +1,19 @@
-// Express stuff
+// Express
 const express = require('express');
 const app = express();
 app.use(express.static('static_files'));
-app.use(express.bodyParser());
 
-// Other required packages
-const bodyParser = require('body-parser');
+app.listen(3000, () => {
+  console.log('server started at http://localhost:3000/');
+});
+
+// Database
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('Transracer.db');
 
-
-
+// Body parser
+const bodyParser = require('body-parser');
+app.use(express.bodyParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -63,6 +66,12 @@ app.get('/select/:songname', (req, res) =>{
   );
 })
 
+
+app.get('/', (req, res) => {
+  res.redirect('/LyricApp.html');
+});
+
+// POST requests
 app.post('/songs/:songname', (req, res) => {
   const name = req.params.songname;
   db.run(
@@ -85,10 +94,4 @@ app.post('/songs/:songname', (req, res) => {
   //console.log(songDatabase[name]);
 });
 
-app.listen(3000, () => {
-  console.log('server started at http://localhost:3000/');
-});
 
-app.get('/', (req, res) => {
-  res.redirect('/LyricApp.html');
-});

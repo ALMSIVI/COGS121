@@ -1,16 +1,17 @@
 {
-  "name": "petsapp-v1",
+  "name": "Transracer",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "",
+  "author": "Team COGO",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^3.21.2",
+    "npm": "^6.0.0",
     "sqlite3": "^4.0.0"
   }
 }
