@@ -1,7 +1,7 @@
 # Milestone 4
 ## Screenshots
 ### Main Page
-![1](mainscreen.jpg)
+![1](Milestone4/mainscreen.jpg)
 
 ### Improved UI Skeletons from milestone3.md
 Our UI skeleton for this milestone is for the Translater-Lyric app. For the last milestone, we presented the UI for the Chat analyzer. 
