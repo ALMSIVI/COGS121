@@ -1,8 +1,8 @@
 $(document).ready(() => {
-    let nextLine = "";
-    let translatedLyrics = "";
-    let lineCounter = 0;
-    let originalLyrics = "";
+  let nextLine = "";
+  let translatedLyrics = "";
+  let lineCounter = 0;
+  let originalLyrics = "";
   $('#readLyrics').click(() => {
     const requestURL = 'songs/' + $('#newSong').val();
     const tlyricURL = 'songs/' + $('#newSong').val(); + '/tlyric'
@@ -55,31 +55,31 @@ $(document).ready(() => {
         translatedLyrics = data.translated;
         originalLyrics = data.original;
         $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
-        //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
+        $('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
       }
     })
   })
 //test
   $("#lineInput").keyup(function(event) {
-      if (event.keyCode === 13) {
-          $("#checkIfCorrect").click();
-      }
+    if (event.keyCode === 13) {
+      $("#checkIfCorrect").click();
+    }
   });
 
   $("#checkIfCorrect").click(function() {
-      if (correctLine.toUpperCase() == $('#lineInput').val().toUpperCase()){
-          lineCounter++;
+    if (correctLine.toUpperCase() == $('#lineInput').val().toUpperCase()){
+      lineCounter++;
 
-          getNextLine();
-          $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
-      }
-      else {alert("doesn't work");
+      getNextLine();
+      $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
+    }
+    else { alert("doesn't work");
       console.log("correctLine= " + correctLine);
       console.log($('#lineInput').val());
     }
   });
 
-  function getNextLine() {
+  const getNextLine = () => {
     nextLine = translatedLyrics.split('\n')[lineCounter];
     while ( $.trim(nextLine) == '' ) {
       lineCounter++;
@@ -87,7 +87,7 @@ $(document).ready(() => {
     }
     correctLine = originalLyrics.split('\n')[lineCounter];
     correctLine = correctLine.replace(/\s+/g,' ').trim();
-  }
+  };
 //test
 
   $('#readLyrics').click(() => {
