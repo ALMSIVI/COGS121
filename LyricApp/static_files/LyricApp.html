@@ -7,40 +7,22 @@
 
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/script.js"></script>
+    <script src="/js/changePage.js"></script>
   </head>
 
   <body>
     <h1>Transracer!</h1>
-    Name of Song: <input type="text" id="newSong"> |
-    Translated Name: <input type="text" id="newSongTranslated">
-    <div>
-      <textarea id="lyrics" rows="20" cols="50" name="comment" form="usrform">
-        Enter original lyrics here...
-      </textarea>
-
-      <textarea id="translatedlyrics" rows="20" cols="50" name="comment" form="usrform">
-        Enter translated lyrics here...
-      </textarea>
-    </div>
-
-    <button id="readLyrics">Save Song</button>
-
-    <p>
-      Start Transracing!
-    </p>
-
-    Enter Song Name: <input type="text" id="songname">
-    <button id="songSelection">Go!</button>
-
-    <div id="jobDiv"></div>
-
+    
     <hr/>
-
-    <div id="translatedarea"></div>
-    <div id="originalarea"></div>
-    <div id="activeinput">
-      Enter Line: <input type="text" id="lineInput">
-      <button id="checkIfCorrect"></button>
+    
+    <div id="content"></div>
+    
+    <div class="navbar">
+      <ul>
+        <li id="add"><a href="#">Add New Song</a></li>
+        <li id="find"><a href="#find">Find a Song</a></li>
+        <li id="line"><a href="#line">Enter Line</a></li>
+      </ul>
     </div>
   </body>
 </html>
