@@ -1,13 +1,15 @@
 $(document).ready(() => {
-  let nextLine = "";
-  let translatedLyrics = "";
-  let lineCounter = 0;
-  let originalLyrics = "";
+    let nextLine = "";
+    let translatedLyrics = "";
+    let lineCounter = 0;
+    let originalLyrics = "";
+
   $('#readLyrics').click(() => {
     const requestURL = 'songs/' + $('#newSong').val();
     const tlyricURL = 'songs/' + $('#newSong').val(); + '/tlyric'
     const originalLyric = $('#lyrics').val();
     const translatedLyric = $('#translatedlyrics').val();
+    const songName = $('#newSong').val();
     //console.log('read button clicked!');
     console.log(originalLyric);
     $.ajax({
@@ -16,13 +18,12 @@ $(document).ready(() => {
       dataType: 'json',
       success: (data) => {
         //console.log(data);
-
         if(data.original) {
-          $('#status').html('Song already exists at URL: ' + requestURL);
+          //$('#status').html('Song already exists at URL: ' + requestURL);
           //$('#jobDiv').html('My job is ' + data.job);
           //$('#petImage').attr('src', data.pet);
         } else {
-          $('#status').html('Error: could not find user at URL: ' + requestURL);
+          //$('#status').html('Error: could not find user at URL: ' + requestURL);
         }
       }
     });
@@ -36,6 +37,7 @@ $(document).ready(() => {
                 'translated': translatedLyric
             },
       success: (data) => {
+          $('#status').html("\"" + songName + "\" was successfully added.");
         //status later
       }
     });
@@ -43,7 +45,7 @@ $(document).ready(() => {
 
   $('#songSelection').click(() => {
     const songName = $('#songname').val();
-    const songSelectURL = 'select/' + songName
+    const songSelectURL = 'select/' + songName;
     $.ajax({
       url: songSelectURL,
       type: 'GET',
@@ -55,31 +57,56 @@ $(document).ready(() => {
         translatedLyrics = data.translated;
         originalLyrics = data.original;
         $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
-        $('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
+
+        //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
       }
     })
   })
 //test
-  $("#lineInput").keyup(function(event) {
-    if (event.keyCode === 13) {
-      $("#checkIfCorrect").click();
-    }
+  $("#lineInput").keyup(function(event) {//Enter Key
+      if (event.keyCode === 13) {
+          $("#checkIfCorrect").click();
+      }
   });
+
 
   $("#checkIfCorrect").click(function() {
-    if (correctLine.toUpperCase() == $('#lineInput').val().toUpperCase()){
-      lineCounter++;
+      const input = $('#lineInput').val().toUpperCase();
+      const correct = correctLine.toUpperCase();
+      if (correct == input){
+          lineCounter++;
 
-      getNextLine();
-      $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
-    }
-    else { alert("doesn't work");
-      console.log("correctLine= " + correctLine);
-      console.log($('#lineInput').val());
+          getNextLine();
+          $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
+          $('#lineInput').val('');
+          $('#hint').html("");
+      }
+      else {
+      const wrongWord = findWrong(input, correct);
+
+      //console.log("correctLine= " + correctLine);
+      //console.log($('#lineInput').val());
+      $('#hint').html("Wrong Word: " + wrongWord);
     }
   });
 
-  const getNextLine = () => {
+
+  $("#lineInput").keyup(function(event) {//Control Key
+      if (event.keyCode === 17) {
+          $('#hint').html("hint: " + getHint());
+      }
+  });
+
+  /*function highlight(text) {
+  var inputText = document.getElementById("inputText");
+  var innerHTML = inputText.innerHTML;
+  var index = innerHTML.indexOf(text);
+  if (index >= 0) {
+   innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
+   inputText.innerHTML = innerHTML;
+  }
+}*/
+  function getNextLine() {
     nextLine = translatedLyrics.split('\n')[lineCounter];
     while ( $.trim(nextLine) == '' ) {
       lineCounter++;
@@ -87,10 +114,27 @@ $(document).ready(() => {
     }
     correctLine = originalLyrics.split('\n')[lineCounter];
     correctLine = correctLine.replace(/\s+/g,' ').trim();
-  };
+  }
+
+  function findWrong(input, correct) {//input = input line all caps, correct = correctline
+    var inputArray = input.split(" ");
+    var correctArray = correct.split(" ");
+    var counter = 0;
+    while(inputArray[counter] == correctArray[counter]){
+      counter++;
+    }
+    return inputArray[counter];
+
+
+  }
+  function getHint() {
+    var inputArray =  $('#lineInput').val().split(" ");
+    var hints = correctLine.split(" ");
+    return hints[inputArray.length-1];
+  }
 //test
 
-  $('#readLyrics').click(() => {
+  /*$('#readLyrics').click(() => {
     $.ajax({
       url: 'songs/',
       type: 'GET',
@@ -100,5 +144,5 @@ $(document).ready(() => {
         $('#status').html('All users: ' + data);
       }
     });
-  });
+  });*/
 });
