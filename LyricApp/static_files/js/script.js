@@ -69,6 +69,15 @@ $(document).ready(() => {
       }
   });
 
+  $("#lineInput").keyup(function(event) {//Control Key
+      if (event.keyCode === 17) {
+        const input = $('#lineInput').val().toUpperCase();
+        const correct = correctLine.toUpperCase();
+        const wordCheck = findWrong(input, correct);
+        $('#hint').html(wordCheck);
+      }
+  });
+
 
   $("#checkIfCorrect").click(function() {
       const input = $('#lineInput').val().toUpperCase();
@@ -86,13 +95,13 @@ $(document).ready(() => {
 
       //console.log("correctLine= " + correctLine);
       //console.log($('#lineInput').val());
-      $('#hint').html("Wrong Word: " + wrongWord);
+      $('#hint').html(wrongWord);
     }
   });
 
 
-  $("#lineInput").keyup(function(event) {//Control Key
-      if (event.keyCode === 17) {
+  $("#lineInput").keyup(function(event) {//Shift Key
+      if (event.keyCode === 16) {
           $('#hint').html("hint: " + getHint());
       }
   });
@@ -120,10 +129,18 @@ $(document).ready(() => {
     var inputArray = input.split(" ");
     var correctArray = correct.split(" ");
     var counter = 0;
+    var response = '';
     while(inputArray[counter] == correctArray[counter]){
       counter++;
     }
-    return inputArray[counter];
+    if(counter == inputArray.length){
+      response = "All Correct so Far!";
+      return response;
+    }
+    else {
+      response = "Wrong word: " + inputArray[counter];
+      return response;
+    }
 
 
   }
