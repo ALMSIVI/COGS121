@@ -13,16 +13,15 @@ const db = new sqlite3.Database('Transracer.db');
 
 // Body parser
 const bodyParser = require('body-parser');
-app.use(express.bodyParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
 // GET requests
 app.get('/songs', (req, res) => {
-  db.all('SELECT song FROM songs_to_lyrics', (err, rows) => {
+  db.all('SELECT title FROM songs_to_lyrics', (err, rows) => {
     console.log(rows);
-    const allSongs = rows.map(e => e.song);
+    const allSongs = rows.map(e => e.title);
     console.log(allSongs);
     res.send(allSongs);
   });
@@ -31,12 +30,16 @@ app.get('/songs', (req, res) => {
   //res.send(allSongtitles);
 });
 
-app.get('/songs/:songname', (req, res) => {
-  const nameToLookup = req.params.songname;
+app.get('/songs/:title/:artist', (req, res) => {
+  const nameToLookup = req.params.title;
+  const artistToLookup = req.params.artist;
+  console.log("Request name:", nameToLookup);
+  console.log("Request artist:", artistToLookup);
   db.all(
-    'SELECT * FROM songs_to_lyrics WHERE song=$song',
+    'SELECT * FROM songs_to_lyrics WHERE title=$song AND artist=$artist',
     {
-      $song: nameToLookup
+      $song: nameToLookup,
+      $artist: artistToLookup
     },
     (err, rows) => {
        console.log(rows);
@@ -47,24 +50,7 @@ app.get('/songs/:songname', (req, res) => {
        }
     }
   );
-})
-
-app.get('/select/:songname', (req, res) =>{
-  const songToLookup = req.params.songname;
-  db.all(
-    'SELECT * FROM songs_to_lyrics WHERE song=$song',
-    {
-      $song: songToLookup
-    },
-    (err, rows) => {
-      if (rows.length > 0) {
-        res.send(rows[0]);
-      } else {
-        res.send({});
-      }
-    }
-  );
-})
+});
 
 
 app.get('/', (req, res) => {
@@ -72,20 +58,21 @@ app.get('/', (req, res) => {
 });
 
 // POST requests
-app.post('/songs/:songname', (req, res) => {
-  const name = req.params.songname;
+app.post('/addSong/', (req, res) => {
   db.run(
-    'INSERT INTO songs_to_lyrics VALUES ($song, $original, $translated)',
+    'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric)',
     {
-      $song: name,
-      $original: req.body.original,
-      $translated: req.body.translated
+      $song: req.body.title,
+      $artist:req.body.artist,
+      $language: req.body.language,
+      $original: req.body.oLyric,
+      $translated: req.body.tLyric
     },
     (err) => {
       if(err) {
-        res.send({message: 'error in app.post(/songs/:songname)'});
+        res.send({message: 'error in app.post(/songs/)'});
       } else {
-        res.send({message: 'successfully run app.post(/song/:songname)'});
+        res.send({message: 'successfully run app.post(/song/)'});
       }
     }
   );
