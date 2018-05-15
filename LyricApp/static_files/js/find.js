@@ -88,7 +88,9 @@ $(() => {
   }
 
   function findWrong(input, correct) {//input = input line all caps, correct = correctline
+    input = input.trim();
     var inputArray = input.split(" ");
+
     var correctArray = correct.split(" ");
     var counter = 0;
     var response = '';
