@@ -92,10 +92,11 @@ $(() => {
     var correctArray = correct.split(" ");
     var counter = 0;
     var response = '';
-    while (inputArray[counter] == correctArray[counter]) {
+    var limit = inputArray.length - 1;
+    while (limit != counter && inputArray[counter] == correctArray[counter]) {
       counter++;
     }
-    if (counter == inputArray.length) {
+    if (inputArray[counter] == correctArray[counter]) {
       response = "All Correct so Far!";
       return response;
     }
