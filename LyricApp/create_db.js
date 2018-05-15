@@ -14,6 +14,9 @@ db.serialize(() => {
   db.run("INSERT INTO songs_to_lyrics VALUES ('Wufan', 'Gaoda', 'zh-cn', 'Wo chi wufan', 'I eat lunch')");
   // To check if artist and album works
   db.run("INSERT INTO songs_to_lyrics VALUES ('Hirugohan', 'Totoro', 'JP', 'Chuushoku toru', 'I eat lunch')");
+  // Multiline try
+  db.run("INSERT into songs_to_lyrics VALUES('Untouchable, Part 1', 'Anathema', 'sp', 'Tuve que dejarte ir' || char(10) || 'A la puesta de sol', 'I had to let you go' || char(10) || 'To the setting sun')");
+
 
   console.log('successfully created the songs_to_lyrics table in ' + dbname);
   console.log('--------------------');
