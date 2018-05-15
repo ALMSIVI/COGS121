@@ -81,16 +81,18 @@ app.post('/addSong/', (req, res) => {
   db.run(
     'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric)',
     {
-      $song: req.body.title,
+      $title: req.body.title,
       $artist:req.body.artist,
       $language: req.body.language,
-      $original: req.body.oLyric,
-      $translated: req.body.tLyric
+      $oLyric: req.body.oLyric,
+      $tLyric: req.body.tLyric
     },
     (err) => {
       if(err) {
+        console.log('error in POST');
         res.send({message: 'error in app.post(/songs/)'});
       } else {
+        console.log('POST sucessful');
         res.send({message: 'successfully run app.post(/song/)'});
       }
     }
