@@ -10,12 +10,13 @@ db.serialize(() => {
   db.run("CREATE TABLE songs_to_lyrics (title TEXT, artist TEXT, language TEXT, oLyric TEXT, tLyric TEXT)");
 
   // insert 3 rows of data:
-  db.run("INSERT INTO songs_to_lyrics VALUES ('Hirugohan', 'Gundam', 'JP', 'Hirugohan taberu', 'I eat lunch')");
-  db.run("INSERT INTO songs_to_lyrics VALUES ('Wufan', 'Gaoda', 'CN', 'Wo chi wufan', 'I eat lunch')");
+  db.run("INSERT INTO songs_to_lyrics VALUES ('Hirugohan', 'Gundam', 'ja', 'Hirugohan taberu', 'I eat lunch')");
+  db.run("INSERT INTO songs_to_lyrics VALUES ('Wufan', 'Gaoda', 'zh-cn', 'Wo chi wufan', 'I eat lunch')");
   // To check if artist and album works
   db.run("INSERT INTO songs_to_lyrics VALUES ('Hirugohan', 'Totoro', 'JP', 'Chuushoku toru', 'I eat lunch')");
 
   console.log('successfully created the songs_to_lyrics table in ' + dbname);
+  console.log('--------------------');
 
   // print them out to confirm their contents:
   db.each("SELECT title, artist, language, oLyric, tLyric FROM songs_to_lyrics", (err, row) => {

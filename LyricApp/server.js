@@ -16,6 +16,8 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Google translate
+const translate = require('google-translate-api');
 
 // GET requests
 app.get('/songs', (req, res) => {
@@ -56,6 +58,23 @@ app.get('/songs/:title/:artist', (req, res) => {
 app.get('/', (req, res) => {
   res.redirect('/LyricApp.html');
 });
+
+/** API reference: https://www.npmjs.com/package/google-translate-api */
+app.get('/words/:word/:lang', (req, res) => {
+  translate(req.params.word,
+    {
+      from: req.params.lang ? req.params.lang : 'auto',
+      to: 'en'
+  }).then((response) => {
+    res.send({
+      translated: response.text
+    });
+  }).catch((err) => {
+    console.error(err);
+    res.send({});
+  });
+});
+
 
 // POST requests
 app.post('/addSong/', (req, res) => {
