@@ -3,6 +3,7 @@ $(() => {
   let translatedLyrics = "";
   let lineCounter = 0;
   let originalLyrics = "";
+  let complete = 'Not Complete';
 
   $('#songSelection').click(() => {
     const songName = $('#songTitle').val();
@@ -45,12 +46,19 @@ $(() => {
     const input = $('#lineInput').val().toUpperCase();
     const correct = correctLine.toUpperCase();
     if (correct == input) {
-      lineCounter++;
+      //lineCounter++;
 
       getNextLine();
+      if(complete == 'Not Complete'){
       $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
       $('#lineInput').val('');
       $('#hint').html("");
+    }
+    else{
+      $('#originalarea').html('Song is Complete!');
+      $('#lineInput').val('');
+      $('#hint').html("");
+    }
     }
     else {
       const wrongWord = findWrong(input, correct);
@@ -78,6 +86,8 @@ $(() => {
   }
 }*/
   function getNextLine() {
+    lineCounter++;
+    if(translatedLyrics.split('\n').length > lineCounter) {
     nextLine = translatedLyrics.split('\n')[lineCounter];
     while ($.trim(nextLine) == '') {
       lineCounter++;
@@ -85,6 +95,10 @@ $(() => {
     }
     correctLine = originalLyrics.split('\n')[lineCounter];
     correctLine = correctLine.replace(/\s+/g, ' ').trim();
+  }
+  else {
+    complete = 'Complete';
+  }
   }
 
   function findWrong(input, correct) {//input = input line all caps, correct = correctline
