@@ -7,14 +7,18 @@ html, body {
   margin-bottom: 35px;
   font-family: "Lucida Console"; /* was "ucida Console" ??? not sure if intended */
   font-size: 22px;
-  
+
 }
 
 h1 {
   letter-spacing: 4px;
   text-shadow: 2px 2px grey;
-  color: black; 
+  color: black;
 
+}
+
+#transrace-start {
+  margin-top: 3cm;
 }
 
 hr {
@@ -129,7 +133,7 @@ li a:hover {
     opacity: 0;
     transform: rotateX(90deg);
   }
-    
+
   100% {
     opacity: 1;
     transform: rotateX(0deg);
