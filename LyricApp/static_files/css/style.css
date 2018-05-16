@@ -4,14 +4,17 @@ html, body {
   padding: 0;
   text-align: center;
   color: #2F2F71;
-  margin-bottom: 30px;
-
+  margin-bottom: 35px;
+  font-family:"ucida Console";
+  font-size: 22px;
+  
 }
 
 h1 {
   letter-spacing: 4px;
   text-shadow: 2px 2px grey;
-  color: black;
+  color: black; 
+
 }
 
 hr {
@@ -39,11 +42,33 @@ hr {
 #lyrics {
   font-weight: bold;
   color: #2F2F71;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  color: #2F2F71;
+  font-size: 20px;
 }
 
-#translatedlyrics {
+#translatedLyrics {
   font-weight: bold;
   color: #2F2F71;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  color: #2F2F71;
+  font-size: 20px;
+  resize: none;
+}
+
+::placeholder {
+  font-weight: bold;
+  font-size: 20px;
+  color: #2F2F71;
+}
+button{
+  font-size: 18px;
+  border-radius: 4px;
+}
+button:hover{
+   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
 .navbar {
