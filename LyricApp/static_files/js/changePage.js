@@ -4,9 +4,7 @@ $(() => {
     
     if (page === "") page = "add";
     
-    $("#content").load(page + ".html", () => {
-    //  $.getScript("/js/script.js");
-    });
+    $("#content").load(page + ".html");
   };
   
   window.onhashchange = changePage;

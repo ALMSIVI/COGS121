@@ -92,7 +92,7 @@ app.post('/addSong/', (req, res) => {
         console.log('error in POST');
         res.send({message: 'error in app.post(/songs/)'});
       } else {
-        console.log('POST sucessful');
+        console.log('POST successful');
         res.send({message: 'successfully run app.post(/song/)'});
       }
     }

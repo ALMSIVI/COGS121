@@ -1,22 +1,27 @@
 <script src="/js/find.js"></script>
-<p>
-  Start Transracing!
-</p>
 
-
-Enter Song Title: <input type="text" id="songTitle">
-Enter Artist: <input type="text" id="songArtist">
-<button id="songSelection">Go!</button>
-<br/>
-For a hint, press the shift key. To check, press the control key. 
-<hr/>
-
-<div id="translatedarea"></div>
-<div id="originalarea"></div>
-
-<div id="activeinput">
-  Enter Line: <input type="text" id="lineInput" value = "">
-  <button id="checkIfCorrect"></button>
+<div>
+  <p>Choose Your Song</p>
+  Title: <input type="text" id="songTitle">
+  Artist: <input type="text" id="songArtist">
+  <button id="songSelection">Go!</button>
+  <div id="error"></div>
 </div>
 
-<div id="hint"></div>
+<div>
+  <div id="translatedarea"></div>
+  <div id="originalarea"></div>
+</div>
+  
+<hr/>
+
+<div id="transrace">
+  <h2 id="transrace-start">Start Transracing!</h2>
+  <div id="activeinput">
+    Enter Line: <input type="text" id="lineInput" value = "">
+    <button id="checkIfCorrect"></button>
+  </div>
+
+  <p>For a hint, press the shift key. To check, press the control key.</p>
+  <div id="hint"></div>
+</div>

@@ -14,14 +14,24 @@ $(() => {
       type: 'GET',
       dataType: 'json',
       success: (data) => {
-        nextLine = data.tLyric.split('\n')[0];
-        correctLine = data.oLyric.split('\n')[0];
-        correctLine = correctLine.replace(/\s+/g, ' ').trim();
-        translatedLyrics = data.tLyric;
-        originalLyrics = data.oLyric;
-        $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
+        /* band-aid because the server should send an error code, not the client-side handling it */
+        if (!data.tLyric) {
+          $('#error').html("<p>Song/Artist pair not found in the database.</p>");
+          $('#error').css('display', 'block');
+        }
+        else {
+          $('#error').css('display', 'none');
+          $('#transrace').css('display', 'block');
+          
+          nextLine = data.tLyric.split('\n')[0];
+          correctLine = data.oLyric.split('\n')[0];
+          correctLine = correctLine.replace(/\s+/g, ' ').trim();
+          translatedLyrics = data.tLyric;
+          originalLyrics = data.oLyric;
+          $('#originalarea').html('<p>Original Lyrics: \n' + '<pre>' + nextLine + '</pre></p>');
 
-        //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
+          //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
+        }
       }
     })
   })
