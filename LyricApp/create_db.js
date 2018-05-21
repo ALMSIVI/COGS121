@@ -7,7 +7,7 @@ const db = new sqlite3.Database(dbname);
 //  which we don't want)
 db.serialize(() => {
   // create a new database table:
-  db.run("CREATE TABLE songs_to_lyrics (title TEXT, artist TEXT, language TEXT, oLyric TEXT, tLyric TEXT)");
+  db.run("CREATE TABLE songs_to_lyrics (title TEXT COLLATE NOCASE, artist TEXT COLLATE NOCASE, language TEXT, oLyric TEXT, tLyric TEXT)");
 
   // insert 3 rows of data:
   db.run("INSERT INTO songs_to_lyrics VALUES ('Hirugohan', 'Gundam', 'ja', 'Hirugohan taberu', 'I eat lunch')");
@@ -15,7 +15,7 @@ db.serialize(() => {
   // To check if artist and album works
   db.run("INSERT INTO songs_to_lyrics VALUES ('Hirugohan', 'Totoro', 'JP', 'Chuushoku toru', 'I eat lunch')");
   // Multiline try
-  db.run("INSERT into songs_to_lyrics VALUES('Untouchable, Part 1', 'Anathema', 'sp', 'Tuve que dejarte ir' || char(10) || 'A la puesta de sol', 'I had to let you go' || char(10) || 'To the setting sun')");
+  db.run("INSERT into songs_to_lyrics VALUES('Untouchable, Part 1', 'Anathema', 'es', 'Tuve que dejarte ir' || char(10) || 'A la puesta de sol', 'I had to let you go' || char(10) || 'To the setting sun')");
 
 
   console.log('successfully created the songs_to_lyrics table in ' + dbname);

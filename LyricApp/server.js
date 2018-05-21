@@ -44,7 +44,7 @@ app.get('/songs/:title/:artist', (req, res) => {
       $artist: artistToLookup
     },
     (err, rows) => {
-       console.log(rows);
+       //console.log(rows);
        if (rows.length > 0) {
          res.send(rows[0]);
        } else {

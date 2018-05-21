@@ -28,7 +28,7 @@ $(() => {
           correctLine = correctLine.replace(/\s+/g, ' ').trim();
           translatedLyrics = data.tLyric;
           originalLyrics = data.oLyric;
-          $('#originalarea').html('<p>Original Lyrics: \n' + '<pre>' + nextLine + '</pre></p>');
+          $('#originalarea').html('<p>Translated Lyrics: \n' + '<pre>' + nextLine + '</pre></p>');
 
           //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
         }
