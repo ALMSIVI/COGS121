@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
 });
 
 /** API reference: https://www.npmjs.com/package/google-translate-api */
-app.get('/words/:word/:lang', (req, res) => {
+app.get('/words/:lang/:word', (req, res) => { //switched lang with word
   translate(req.params.word,
     {
       from: req.params.lang ? req.params.lang : 'auto',
@@ -97,9 +97,5 @@ app.post('/addSong/', (req, res) => {
       }
     }
   );
-  //songDatabase[name] = {original: req.body.original, translated: req.body.translated};
-  //song.original = req.body;
-  //console.log(songDatabase[name]);
+
 });
-
-

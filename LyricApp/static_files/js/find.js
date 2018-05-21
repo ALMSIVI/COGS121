@@ -4,11 +4,14 @@ $(() => {
   let lineCounter = 0;
   let originalLyrics = "";
   let complete = 'Not Complete';
+  let finalScore = 100;
+  var hintUrl = 'words/';
 
   $('#songSelection').click(() => {
     const songName = $('#songTitle').val();
     const songArtist = $('#songArtist').val();
     const songSelectURL = 'songs/' + songName + '/' + songArtist;
+
     $.ajax({
       url: songSelectURL,
       type: 'GET',
@@ -22,12 +25,15 @@ $(() => {
         else {
           $('#error').css('display', 'none');
           $('#transrace').css('display', 'block');
-          
+          $('#hint').html("");
+          finalScore = 100;
+          complete = 'Not Complete';
           nextLine = data.tLyric.split('\n')[0];
           correctLine = data.oLyric.split('\n')[0];
           correctLine = correctLine.replace(/\s+/g, ' ').trim();
           translatedLyrics = data.tLyric;
           originalLyrics = data.oLyric;
+          hintUrl += data.language + '/';
           $('#originalarea').html('<p>Translated Lyrics: \n' + '<pre>' + nextLine + '</pre></p>');
 
           //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
@@ -35,7 +41,6 @@ $(() => {
       }
     })
   })
-  //test
   $("#lineInput").keyup(function (event) {//Enter Key
     if (event.keyCode === 13) {
       $("#checkIfCorrect").click();
@@ -57,7 +62,7 @@ $(() => {
     const correct = correctLine.toUpperCase();
     if (correct == input) {
       //lineCounter++;
-
+      finalScore += 20;
       getNextLine();
       if(complete == 'Not Complete'){
       $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
@@ -67,10 +72,11 @@ $(() => {
     else{
       $('#originalarea').html('Song is Complete!');
       $('#lineInput').val('');
-      $('#hint').html("");
+      $('#hint').html("Final Score" + finalScore);
     }
     }
     else {
+      finalScore -= 10;
       const wrongWord = findWrong(input, correct);
 
       //console.log("correctLine= " + correctLine);
@@ -82,7 +88,7 @@ $(() => {
 
   $("#lineInput").keyup(function (event) {//Shift Key
     if (event.keyCode === 16) {
-      $('#hint').html("hint: " + getHint());
+      getHint();
     }
   });
 
@@ -134,11 +140,27 @@ $(() => {
 
   }
   function getHint() {
+    //test
+    finalScore -= 3;
     var inputArray = $('#lineInput').val().split(" ");
     var hints = correctLine.split(" ");
-    return hints[inputArray.length - 1];
+    var hintWord = hints[inputArray.length - 1];//
+    var hintTrans = 'didnt work';
+    var hintUrlWord = hintUrl + hintWord; //made this way to reuse hintUrl;
+    console.log(hintUrl);
+    $.ajax({
+      url: hintUrlWord,
+      type: 'GET',
+      dataType: 'json',
+      success: (data) => {
+          $('#hint').html("hint: " + data.translated);
+      console.log(data);
+      }
+    })
+
+    //return hints[inputArray.length - 1];
   }
-  //test
+
 
   /*$('#readLyrics').click(() => {
     $.ajax({
