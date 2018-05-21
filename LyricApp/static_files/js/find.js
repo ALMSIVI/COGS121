@@ -6,7 +6,8 @@ $(() => {
   let complete = 'Not Complete';
   let finalScore = 100;
   var hintUrl = 'words/';
-
+  let hintCounter = 0;
+  let inputLength = 0;//used for hint to see if user is still on the same word
   $('#songSelection').click(() => {
     const songName = $('#songTitle').val();
     const songArtist = $('#songArtist').val();
@@ -26,8 +27,10 @@ $(() => {
           $('#error').css('display', 'none');
           $('#transrace').css('display', 'block');
           $('#hint').html("");
+          hintCounter = 0; //resetting all values if user selects new song
           finalScore = 100;
           complete = 'Not Complete';
+          lineCounter = 0;
           nextLine = data.tLyric.split('\n')[0];
           correctLine = data.oLyric.split('\n')[0];
           correctLine = correctLine.replace(/\s+/g, ' ').trim();
@@ -72,7 +75,7 @@ $(() => {
     else{
       $('#originalarea').html('Song is Complete!');
       $('#lineInput').val('');
-      $('#hint').html("Final Score" + finalScore);
+      $('#hint').html("Final Score: " + finalScore);
     }
     }
     else {
@@ -141,22 +144,27 @@ $(() => {
   }
   function getHint() {
     //test
-    finalScore -= 3;
     var inputArray = $('#lineInput').val().split(" ");
     var hints = correctLine.split(" ");
+    if(inputLength != inputArray.length) {//first hint
+    finalScore -= 2;
+    var hintTrans = '';
     var hintWord = hints[inputArray.length - 1];//
-    var hintTrans = 'didnt work';
     var hintUrlWord = hintUrl + hintWord; //made this way to reuse hintUrl;
-    console.log(hintUrl);
     $.ajax({
       url: hintUrlWord,
       type: 'GET',
       dataType: 'json',
       success: (data) => {
           $('#hint').html("hint: " + data.translated);
-      console.log(data);
       }
     })
+    inputLength = inputArray.length;
+  }
+  else {
+    finalScore -= 3;
+    $('#hint').html("hint: " +  hints[inputArray.length - 1]);
+  }
 
     //return hints[inputArray.length - 1];
   }
