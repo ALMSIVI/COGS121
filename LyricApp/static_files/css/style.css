@@ -55,6 +55,9 @@ hr {
   font-weight: bolder;
 }
 
+#choosesong {
+  font-weight: bolder;
+}
 .pause {
   animation-name: none;
 }
