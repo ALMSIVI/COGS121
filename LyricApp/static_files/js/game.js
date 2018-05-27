@@ -12,6 +12,10 @@ $(() => {
     const songName = $('#songTitle').val();
     const songArtist = $('#songArtist').val();
     const songSelectURL = 'songs/' + songName + '/' + songArtist;
+    if (!songName) {
+      alert('Please enter a song name!');
+      return;
+    }
 
     $.ajax({
       url: songSelectURL,
@@ -42,8 +46,9 @@ $(() => {
           //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
         }
       }
-    })
-  })
+    });
+  });
+
   $("#lineInput").keyup(function (event) {//Enter Key
     if (event.keyCode === 13) {
       $("#checkIfCorrect").click();
@@ -67,18 +72,16 @@ $(() => {
       //lineCounter++;
       finalScore += 20;
       getNextLine();
-      if(complete == 'Not Complete'){
-      $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
-      $('#lineInput').val('');
-      $('#hint').html("");
-    }
-    else{
-      $('#originalarea').html('Song is Complete!');
-      $('#lineInput').val('');
-      $('#hint').html("Final Score: " + finalScore);
-    }
-    }
-    else {
+      if (complete == 'Not Complete') {
+        $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
+        $('#lineInput').val('');
+        $('#hint').html("");
+      } else {
+        $('#originalarea').html('Song is Complete!');
+        $('#lineInput').val('');
+        $('#hint').html("Final Score: " + finalScore);
+      }
+    } else {
       finalScore -= 10;
       const wrongWord = findWrong(input, correct);
 
@@ -106,18 +109,18 @@ $(() => {
 }*/
   function getNextLine() {
     lineCounter++;
-    if(translatedLyrics.split('\n').length > lineCounter) {
-    nextLine = translatedLyrics.split('\n')[lineCounter];
-    while ($.trim(nextLine) == '') {
-      lineCounter++;
+    if (translatedLyrics.split('\n').length > lineCounter) {
       nextLine = translatedLyrics.split('\n')[lineCounter];
+      while ($.trim(nextLine) == '') {
+        lineCounter++;
+        nextLine = translatedLyrics.split('\n')[lineCounter];
+      }
+      correctLine = originalLyrics.split('\n')[lineCounter];
+      correctLine = correctLine.replace(/\s+/g, ' ').trim();
     }
-    correctLine = originalLyrics.split('\n')[lineCounter];
-    correctLine = correctLine.replace(/\s+/g, ' ').trim();
-  }
-  else {
-    complete = 'Complete';
-  }
+    else {
+      complete = 'Complete';
+    }
   }
 
   function findWrong(input, correct) {//input = input line all caps, correct = correctline
@@ -139,32 +142,32 @@ $(() => {
       response = "Wrong word: " + inputArray[counter];
       return response;
     }
-
-
   }
+
+
   function getHint() {
     //test
     var inputArray = $('#lineInput').val().split(" ");
     var hints = correctLine.split(" ");
-    if(inputLength != inputArray.length) {//first hint
-    finalScore -= 2;
-    var hintTrans = '';
-    var hintWord = hints[inputArray.length - 1];//
-    var hintUrlWord = hintUrl + hintWord; //made this way to reuse hintUrl;
-    $.ajax({
-      url: hintUrlWord,
-      type: 'GET',
-      dataType: 'json',
-      success: (data) => {
+    if (inputLength != inputArray.length) {//first hint
+      finalScore -= 2;
+      var hintTrans = '';
+      var hintWord = hints[inputArray.length - 1];//
+      var hintUrlWord = hintUrl + hintWord; //made this way to reuse hintUrl;
+      $.ajax({
+        url: hintUrlWord,
+        type: 'GET',
+        dataType: 'json',
+        success: (data) => {
           $('#hint').html("hint: " + data.translated);
-      }
-    })
-    inputLength = inputArray.length;
-  }
-  else {
-    finalScore -= 3;
-    $('#hint').html("hint: " +  hints[inputArray.length - 1]);
-  }
+        }
+      });
+      inputLength = inputArray.length;
+    }
+    else {
+      finalScore -= 3;
+      $('#hint').html("hint: " + hints[inputArray.length - 1]);
+    }
 
     //return hints[inputArray.length - 1];
   }

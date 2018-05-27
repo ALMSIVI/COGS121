@@ -75,6 +75,24 @@ app.get('/words/:lang/:word', (req, res) => { //switched lang with word
   });
 });
 
+app.get('/topSongs', (req, res) => {
+  db.all(
+    'SELECT * FROM songs_to_lyrics ORDER BY score DESC',
+    (err, rows) => {
+      console.log(rows);
+      const songs = rows.map((e) => {
+        const song = {
+          title: e.title,
+          artist: e.artist
+        };
+        return song;
+      });
+
+      const list = {songs: songs};
+      res.send(list);
+    }
+  );
+});
 
 // POST requests
 app.post('/addSong/', (req, res) => {
