@@ -8,15 +8,24 @@ $(() => {
   var hintUrl = 'words/';
   let hintCounter = 0;
   let inputLength = 0;//used for hint to see if user is still on the same word
+  
+  if (sessionStorage.title && sessionStorage.artist) {
+    render(sessionStorage.title, sessionStorage.artist);
+  }
+  
   $('#songSelection').click(() => {
-    const songName = $('#songTitle').val();
-    const songArtist = $('#songArtist').val();
-    const songSelectURL = 'songs/' + songName + '/' + songArtist;
-    if (!songName) {
-      alert('Please enter a song name!');
-      return;
+    const title = $('#songTitle').val();
+    const artist = $('#songArtist').val();
+    if (!title || !artist) {
+      alert('Please enter both the title and the artsit!');
+    } else {
+      render(title, artist);
     }
+  });
 
+  /** Connects to the back end and populates the page */
+  function render(title, artist) {
+    const songSelectURL = 'songs/' + title + '/' + artist;
     $.ajax({
       url: songSelectURL,
       type: 'GET',
@@ -47,7 +56,8 @@ $(() => {
         }
       }
     });
-  });
+  }
+
 
   $("#lineInput").keyup(function (event) {//Enter Key
     if (event.keyCode === 13) {

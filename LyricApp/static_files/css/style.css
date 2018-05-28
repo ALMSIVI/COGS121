@@ -142,3 +142,8 @@ li a:hover {
     transform: rotateX(0deg);
   }
 }
+
+.listSong {
+  display: inline;
+  color: black;
+}

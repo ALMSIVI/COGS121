@@ -46,6 +46,12 @@ app.get('/songs/:title/:artist', (req, res) => {
     (err, rows) => {
        //console.log(rows);
        if (rows.length > 0) {
+         db.run('UPDATE songs_to_lyrics SET score=$newscore WHERE artist=$artist AND title=$title',
+        {
+          $newscore: rows[0].score + 1,
+          $artist: rows[0].artist,
+          $title: rows[0].title
+        });
          res.send(rows[0]);
        } else {
          res.send({});
@@ -96,8 +102,20 @@ app.get('/topSongs', (req, res) => {
 
 // POST requests
 app.post('/addSong/', (req, res) => {
+  /*
+  db.all('SELECT * FROM songs_to_lyrics WHERE title=$song AND artist=$artist',
+  {
+    $song: req.body.title,
+    $artist: req.body.artist
+  },
+  (err, rows) => {
+    if (rows.length > 0) {
+      db.run('UPDATE songs_to_lyrics SET ')
+    }
+  });
+  */
   db.run(
-    'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric)',
+    'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric, 0)',
     {
       $title: req.body.title,
       $artist:req.body.artist,
