@@ -182,9 +182,9 @@ app.post('/createAccount/', (req, res) => {
 
 app.post('/addScore', (req, res) => {
   const username = req.body.username;
+  const score = req.body.score;
   const title = req.body.title;
   const artist = req.body.artist;
-  const score = req.body.score;
   db.run(
     'INSERT INTO score VALUES ($username, $score, $title, $artist)',
     {
