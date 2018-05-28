@@ -14,7 +14,11 @@ h1 {
   letter-spacing: 4px;
   text-shadow: 2px 2px grey;
   color: black;
+}
 
+input {
+  font-size: 18px;
+  border-radius: 5px;
 }
 
 #transrace-start {
@@ -149,5 +153,13 @@ li a:hover {
 
 .listSong {
   display: inline;
-  color: black;
+  padding: 2px;
+  width: 200px;
+  color: #2F2F71;
+}
+
+.listSong:hover{
+  color: white;
+  background-color: #111;
+  padding: 2px;
 }
