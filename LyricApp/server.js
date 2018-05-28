@@ -259,7 +259,7 @@ app.post('/showScore', (req, res) => {
     },
     (err, rows) => {
       if (rows.length > 0) {
-        res.send(rows[0]);
+        res.send({scores: rows});
       } else {
         console.log('Error in POST /showScore');
         res.send({});
