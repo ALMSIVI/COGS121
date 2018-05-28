@@ -133,5 +133,48 @@ app.post('/addSong/', (req, res) => {
       }
     }
   );
+});
 
+
+// GET for login form
+app.get('/accounts/:username/:password', (req, res) => {
+  const username = req.params.username;
+  const password = req.params.password;
+  console.log("Request username:", username);
+  console.log("Request password:", password);
+  db.all(
+    'SELECT * FROM account WHERE username=$username AND password=$password',
+    {
+      $username: username,
+      $password: password
+    },
+    (err, rows) => {
+       console.log(rows);
+       if (rows.length > 0) {
+         res.send(rows[0]);
+       } else {
+         res.send({});
+       }
+    }
+  );
+});
+
+// POST for create a new account
+app.post('/createAccount/', (req, res) => {
+  db.run(
+    'INSERT INTO account VALUES ($username, $password)',
+    {
+      $username: req.body.username,
+      $password: req.body.password,
+    },
+    (err) => {
+      if(err) {
+        console.log('error in POST');
+        res.send({message: 'ERROR: Username already in use'});
+      } else {
+        console.log('POST successful');
+        res.send({message: 'Account for \'' + req.body.username + '\' successfully created'});
+      }
+    }
+  );
 });
