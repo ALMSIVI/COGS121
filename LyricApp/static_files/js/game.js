@@ -8,11 +8,13 @@ $(() => {
   var hintUrl = 'words/';
   let hintCounter = 0;
   let inputLength = 0;//used for hint to see if user is still on the same word
-  
+
+  /** Check if the user comes from the find page; if so, render with sessionStorage */
   if (sessionStorage.title && sessionStorage.artist) {
     render(sessionStorage.title, sessionStorage.artist);
   }
-  
+
+  /** Once the user clicks load up, render with user input */
   $('#songSelection').click(() => {
     const title = $('#songTitle').val();
     const artist = $('#songArtist').val();
@@ -23,7 +25,7 @@ $(() => {
     }
   });
 
-  /** Connects to the back end and populates the page */
+  /** Connects to the back end and populates the game */
   function render(title, artist) {
     const songSelectURL = 'songs/' + title + '/' + artist;
     $.ajax({
@@ -58,31 +60,31 @@ $(() => {
     });
   }
 
-
-  $("#lineInput").keyup(function (event) {//Enter Key
-    if (event.keyCode === 13) {
-      $("#checkIfCorrect").click();
+  /** Handles different key inputs */
+  $("#lineInput").keyup((event) => {
+    switch (event.keyCode) {
+      case 13:
+        $("#checkIfCorrect").click(); // Enter key: finish one line, check for next
+        break;
+      case 17: // Control key
+        const input = $('#lineInput').val().toUpperCase();
+        const correct = correctLine.toUpperCase();
+        const wordCheck = findWrong(input, correct);
+        $('#hint').html(wordCheck);
+        break;
+      case 16: // Shift key
+        getHint();
+        break;
     }
   });
 
-  $("#lineInput").keyup(function (event) {//Control Key
-    if (event.keyCode === 17) {
-      const input = $('#lineInput').val().toUpperCase();
-      const correct = correctLine.toUpperCase();
-      const wordCheck = findWrong(input, correct);
-      $('#hint').html(wordCheck);
-    }
-  });
-
-
-  $("#checkIfCorrect").click(function () {
-    const input = $('#lineInput').val().toUpperCase();
-    const correct = correctLine.toUpperCase();
-    if (correct == input) {
+  /** Check if user input is correct. */
+  $("#checkIfCorrect").click(() => {
+    if (correctLine.equalsIgnoreCase($('#lineInput').val())) { // ignor case comparison
       //lineCounter++;
       finalScore += 20;
       getNextLine();
-      if (complete == 'Not Complete') {
+      if (complete === 'Not Complete') {
         $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
         $('#lineInput').val('');
         $('#hint').html("");
@@ -101,12 +103,6 @@ $(() => {
     }
   });
 
-
-  $("#lineInput").keyup(function (event) {//Shift Key
-    if (event.keyCode === 16) {
-      getHint();
-    }
-  });
 
   /*function highlight(text) {
   var inputText = document.getElementById("inputText");

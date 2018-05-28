@@ -27,7 +27,7 @@ $(() => {
     const title = $('#songTitle').val();
     const artist = $('#songArtist').val();
     if (!title || !artist) {
-      alert('Please enter both the title and the artsit!');
+      alert('Please enter both the title and the artist!');
     } else {
       sessionStorage.setItem('artist', title);
       sessionStorage.setItem('title', artist);
