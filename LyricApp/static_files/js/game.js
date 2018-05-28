@@ -1,8 +1,8 @@
 $(() => {
-  let nextLine = "";
-  let translatedLyrics = "";
+  let nextLine = '';
+  let translatedLyrics = '';
   let lineCounter = 0;
-  let originalLyrics = "";
+  let originalLyrics = '';
   let complete = 'Not Complete';
   let finalScore = 100;
   var hintUrl = 'words/';
@@ -37,12 +37,12 @@ $(() => {
       success: (data) => {
         /* band-aid because the server should send an error code, not the client-side handling it */
         if (!data.tLyric) {
-          $('#error').html("<p>Song/Artist pair not found in the database.</p>");
+          $('#error').html('<p>Song/Artist pair not found in the database.</p>');
           $('#error').css('display', 'block');
         } else {
           $('#error').css('display', 'none');
           $('#transrace').css('display', 'block');
-          $('#hint').html("");
+          $('#hint').html('');
           hintCounter = 0; // resetting all values if user selects new song
           finalScore = 100;
           complete = 'Not Complete';
@@ -62,10 +62,10 @@ $(() => {
   }
 
   /** Handles different key inputs */
-  $("#lineInput").keyup((event) => {
+  $('#lineInput').keyup((event) => {
     switch (event.keyCode) {
       case 13:
-        $("#checkIfCorrect").click(); // Enter key: finish one line, check for next
+        $('#checkIfCorrect').click(); // Enter key: finish one line, check for next
         break;
       case 17: // Control key
         const input = $('#lineInput').val().toUpperCase();
@@ -80,7 +80,7 @@ $(() => {
   });
 
   /** Check if user input is correct. */
-  $("#checkIfCorrect").click(() => {
+  $('#checkIfCorrect').click(() => {
     const correctLineUpper = correctLine.toUpperCase();
     const inputUpper = $('#lineInput').val().toUpperCase();
     if (correctLineUpper === inputUpper) { // ignor case comparison
@@ -90,11 +90,30 @@ $(() => {
       if (complete === 'Not Complete') {
         $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
         $('#lineInput').val('');
-        $('#hint').html("");
-      } else {
+        $('#hint').html('');
+      } else { // Song is completed
         $('#originalarea').html('Song is Complete!');
         $('#lineInput').val('');
-        $('#hint').html("Final Score: " + finalScore);
+        $('#hint').append('<p>Final Score: ' + finalScore + '</p>');
+        if (sessionStorage.username) {
+          $.ajax({
+            url: 'addScore',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              username: sessionStorage.username,
+              title: sessionStorage.title,
+              artist: sessionStorage.artist,
+              score: finalScore
+            },
+            success: (data) => {
+              console.log(data.message);
+            }
+          });
+          $('#hint').append('<p>Your score has been uploaded.</p>');
+        } else {
+          $('#hint').append('<p>Log in to have your score uploaded.</p>');
+        }
       }
     } else {
       finalScore -= 10;
@@ -133,8 +152,8 @@ $(() => {
 
   function findWrong(input, correct) { // input = input line all caps, correct = correctline
     input = input.trim();
-    const inputArray = input.split(" ");
-    const correctArray = correct.split(" ");
+    const inputArray = input.split(' ');
+    const correctArray = correct.split(' ');
     let counter = 0;
     const limit = inputArray.length - 1;
     while (limit != counter && inputArray[counter] == correctArray[counter]) {
@@ -143,7 +162,7 @@ $(() => {
     if (inputArray[counter] == correctArray[counter]) {
       return 'All Correct so Far!';
     } else {
-      return "Wrong word: " + inputArray[counter];
+      return 'Wrong word: ' + inputArray[counter];
     }
   }
 
