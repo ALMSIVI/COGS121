@@ -124,6 +124,10 @@ li a:hover {
   background-color: #111;
 }
 
+#logout {
+  display: none;
+}
+
 @keyframes transrace {
   0% {
     opacity: 0;
