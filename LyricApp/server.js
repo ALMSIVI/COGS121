@@ -195,11 +195,11 @@ app.post('/addScore', (req, res) => {
     },
     (err) => {
       if(err) {
-        console.log('error in POST');
+        console.log('error in POST', err);
         res.send({message: 'error in app.post(/addScore/)'});
       } else {
         console.log('POST successful');
-        res.send({message: 'successfully run app.post(/songs/)'});
+        res.send({message: 'successfully run app.post(/addScore/)'});
       }
     }
   );
