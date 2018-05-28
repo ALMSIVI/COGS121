@@ -7,23 +7,27 @@ $(() => {
   let finalScore = 100;
   var hintUrl = 'words/';
   let hintCounter = 0;
-  let inputLength = 0;//used for hint to see if user is still on the same word
-  
+  let inputLength = 0; // used for hint to see if user is still on the same word
+
+  /** Check if the user comes from the find page; if so, render with sessionStorage */
   if (sessionStorage.title && sessionStorage.artist) {
     render(sessionStorage.title, sessionStorage.artist);
   }
-  
+
+  /** Once the user clicks load up, render with user input */
   $('#songSelection').click(() => {
     const title = $('#songTitle').val();
     const artist = $('#songArtist').val();
     if (!title || !artist) {
       alert('Please enter both the title and the artsit!');
     } else {
+      sessionStorage.setItem('title', title);
+      sessionStorage.setItem('artist', artist);
       render(title, artist);
     }
   });
 
-  /** Connects to the back end and populates the page */
+  /** Connects to the back end and populates the game */
   function render(title, artist) {
     const songSelectURL = 'songs/' + title + '/' + artist;
     $.ajax({
@@ -35,12 +39,11 @@ $(() => {
         if (!data.tLyric) {
           $('#error').html("<p>Song/Artist pair not found in the database.</p>");
           $('#error').css('display', 'block');
-        }
-        else {
+        } else {
           $('#error').css('display', 'none');
           $('#transrace').css('display', 'block');
           $('#hint').html("");
-          hintCounter = 0; //resetting all values if user selects new song
+          hintCounter = 0; // resetting all values if user selects new song
           finalScore = 100;
           complete = 'Not Complete';
           lineCounter = 0;
@@ -58,31 +61,33 @@ $(() => {
     });
   }
 
-
-  $("#lineInput").keyup(function (event) {//Enter Key
-    if (event.keyCode === 13) {
-      $("#checkIfCorrect").click();
+  /** Handles different key inputs */
+  $("#lineInput").keyup((event) => {
+    switch (event.keyCode) {
+      case 13:
+        $("#checkIfCorrect").click(); // Enter key: finish one line, check for next
+        break;
+      case 17: // Control key
+        const input = $('#lineInput').val().toUpperCase();
+        const correct = correctLine.toUpperCase();
+        const wordCheck = findWrong(input, correct);
+        $('#hint').html(wordCheck);
+        break;
+      case 18: // Alt key
+        getHint();
+        break;
     }
   });
 
-  $("#lineInput").keyup(function (event) {//Control Key
-    if (event.keyCode === 17) {
-      const input = $('#lineInput').val().toUpperCase();
-      const correct = correctLine.toUpperCase();
-      const wordCheck = findWrong(input, correct);
-      $('#hint').html(wordCheck);
-    }
-  });
-
-
-  $("#checkIfCorrect").click(function () {
-    const input = $('#lineInput').val().toUpperCase();
-    const correct = correctLine.toUpperCase();
-    if (correct == input) {
-      //lineCounter++;
+  /** Check if user input is correct. */
+  $("#checkIfCorrect").click(() => {
+    const correctLineUpper = correctLine.toUpperCase();
+    const inputUpper = $('#lineInput').val().toUpperCase();
+    if (correctLineUpper === inputUpper) { // ignor case comparison
+      // lineCounter++;
       finalScore += 20;
       getNextLine();
-      if (complete == 'Not Complete') {
+      if (complete === 'Not Complete') {
         $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
         $('#lineInput').val('');
         $('#hint').html("");
@@ -94,19 +99,12 @@ $(() => {
     } else {
       finalScore -= 10;
       const wrongWord = findWrong(input, correct);
-
       //console.log("correctLine= " + correctLine);
       //console.log($('#lineInput').val());
       $('#hint').html(wrongWord);
     }
   });
 
-
-  $("#lineInput").keyup(function (event) {//Shift Key
-    if (event.keyCode === 16) {
-      getHint();
-    }
-  });
 
   /*function highlight(text) {
   var inputText = document.getElementById("inputText");
@@ -117,6 +115,7 @@ $(() => {
    inputText.innerHTML = innerHTML;
   }
 }*/
+
   function getNextLine() {
     lineCounter++;
     if (translatedLyrics.split('\n').length > lineCounter) {
@@ -127,56 +126,47 @@ $(() => {
       }
       correctLine = originalLyrics.split('\n')[lineCounter];
       correctLine = correctLine.replace(/\s+/g, ' ').trim();
-    }
-    else {
+    } else {
       complete = 'Complete';
     }
   }
 
-  function findWrong(input, correct) {//input = input line all caps, correct = correctline
+  function findWrong(input, correct) { // input = input line all caps, correct = correctline
     input = input.trim();
-    var inputArray = input.split(" ");
-
-    var correctArray = correct.split(" ");
-    var counter = 0;
-    var response = '';
-    var limit = inputArray.length - 1;
+    const inputArray = input.split(" ");
+    const correctArray = correct.split(" ");
+    let counter = 0;
+    const limit = inputArray.length - 1;
     while (limit != counter && inputArray[counter] == correctArray[counter]) {
       counter++;
     }
     if (inputArray[counter] == correctArray[counter]) {
-      response = "All Correct so Far!";
-      return response;
-    }
-    else {
-      response = "Wrong word: " + inputArray[counter];
-      return response;
+      return 'All Correct so Far!';
+    } else {
+      return "Wrong word: " + inputArray[counter];
     }
   }
 
-
   function getHint() {
-    //test
-    var inputArray = $('#lineInput').val().split(" ");
-    var hints = correctLine.split(" ");
-    if (inputLength != inputArray.length) {//first hint
+    const inputArray = $('#lineInput').val().split(' ');
+    const hints = correctLine.split(' ');
+    if (inputLength != inputArray.length) { // first hint
       finalScore -= 2;
-      var hintTrans = '';
-      var hintWord = hints[inputArray.length - 1];//
-      var hintUrlWord = hintUrl + hintWord; //made this way to reuse hintUrl;
+      const hintTrans = '';
+      const hintWord = hints[inputArray.length - 1];
+      const hintUrlWord = hintUrl + hintWord; // made this way to reuse hintUrl;
       $.ajax({
         url: hintUrlWord,
         type: 'GET',
         dataType: 'json',
         success: (data) => {
-          $('#hint').html("hint: " + data.translated);
+          $('#hint').html('hint: ' + data.translated);
         }
       });
       inputLength = inputArray.length;
-    }
-    else {
+    } else {
       finalScore -= 3;
-      $('#hint').html("hint: " + hints[inputArray.length - 1]);
+      $('#hint').html('hint: ' + hints[inputArray.length - 1]);
     }
 
     //return hints[inputArray.length - 1];
