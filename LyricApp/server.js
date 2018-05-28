@@ -44,18 +44,18 @@ app.get('/songs/:title/:artist', (req, res) => {
       $artist: artistToLookup
     },
     (err, rows) => {
-       //console.log(rows);
-       if (rows.length > 0) {
-         db.run('UPDATE songs_to_lyrics SET score=$newscore WHERE artist=$artist AND title=$title',
-        {
-          $newscore: rows[0].score + 1,
-          $artist: rows[0].artist,
-          $title: rows[0].title
-        });
-         res.send(rows[0]);
-       } else {
-         res.send({});
-       }
+      //console.log(rows);
+      if (rows.length > 0) {
+        db.run('UPDATE songs_to_lyrics SET score=$newscore WHERE artist=$artist AND title=$title',
+          {
+            $newscore: rows[0].score + 1,
+            $artist: rows[0].artist,
+            $title: rows[0].title
+          });
+        res.send(rows[0]);
+      } else {
+        res.send({});
+      }
     }
   );
 });
@@ -71,14 +71,14 @@ app.get('/words/:lang/:word', (req, res) => { //switched lang with word
     {
       from: req.params.lang ? req.params.lang : 'auto',
       to: 'en'
-  }).then((response) => {
-    res.send({
-      translated: response.text
+    }).then((response) => {
+      res.send({
+        translated: response.text
+      });
+    }).catch((err) => {
+      console.error(err);
+      res.send({});
     });
-  }).catch((err) => {
-    console.error(err);
-    res.send({});
-  });
 });
 
 app.get('/topSongs', (req, res) => {
@@ -94,7 +94,7 @@ app.get('/topSongs', (req, res) => {
         return song;
       });
 
-      const list = {songs: songs};
+      const list = { songs: songs };
       res.send(list);
     }
   );
@@ -119,18 +119,18 @@ app.post('/addSong/', (req, res) => {
     'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric, 0)',
     {
       $title: req.body.title,
-      $artist:req.body.artist,
+      $artist: req.body.artist,
       $language: req.body.language,
       $oLyric: req.body.oLyric,
       $tLyric: req.body.tLyric
     },
     (err) => {
-      if(err) {
+      if (err) {
         console.log('error in POST');
-        res.send({message: 'error in app.post(/songs/)'});
+        res.send({ message: 'error in app.post(/songs/)' });
       } else {
         console.log('POST successful');
-        res.send({message: 'successfully run app.post(/song/)'});
+        res.send({ message: 'successfully run app.post(/song/)' });
       }
     }
   );
@@ -150,12 +150,12 @@ app.post('/accounts/', (req, res) => {
       $password: password
     },
     (err, rows) => {
-       console.log(rows);
-       if (rows.length > 0) {
-         res.send(rows[0]);
-       } else {
-         res.send({});
-       }
+      console.log(rows);
+      if (rows.length > 0) {
+        res.send(rows[0]);
+      } else {
+        res.send({});
+      }
     }
   );
 });
@@ -169,38 +169,101 @@ app.post('/createAccount/', (req, res) => {
       $password: req.body.password
     },
     (err) => {
-      if(err) {
+      if (err) {
         console.log('error in POST');
-        res.send({message: 'ERROR: Username already in use'});
+        res.send({ message: 'ERROR: Username already in use' });
       } else {
         console.log('POST successful');
-        res.send({message: 'Account for \'' + req.body.username + '\' successfully created'});
+        res.send({ message: 'Account for \'' + req.body.username + '\' successfully created' });
       }
     }
   );
 });
 
+// Update score.
+const moment = require('moment');
 app.post('/addScore', (req, res) => {
   const username = req.body.username;
   const score = req.body.score;
   const title = req.body.title;
   const artist = req.body.artist;
-  db.run(
-    'INSERT INTO score VALUES ($username, $score, $title, $artist)',
+  const date = moment().format('YYYY-MM-DD');
+  console.log('date', date);
+  db.all(
+    'SELECT * FROM score WHERE username=$username AND title=$title AND artist=$artist AND date=$date',
     {
       $username: username,
-      $score: score,
+      $title: title,
+      $artist: artist,
+      $date: date
+    },
+    (err, rows) => {
+      if (rows.length > 0) {
+        if (rows[0].score < score) { // update
+          db.run(
+            'UPDATE score SET score=$score WHERE username=$username AND title=$title AND artist=$artist AND date=$date',
+            {
+              $username: username,
+              $score: score,
+              $title: title,
+              $artist: artist,
+              $date: date
+            },
+            (err) => {
+              if (err) {
+                console.log('error in POST', err);
+                res.send({ message: 'error in app.post(/addScore/)' });
+              } else {
+                console.log('POST successful');
+                res.send({ message: 'successfully run app.post(/addScore/)' });
+              }
+            }
+          );
+        }
+      } else { // insert
+        db.run(
+          'INSERT INTO score VALUES ($username, $score, $title, $artist AND date=$date)',
+          {
+            $username: username,
+            $score: score,
+            $title: title,
+            $artist: artist,
+            $date: date
+          },
+          (err) => {
+            if (err) {
+              console.log('error in POST', err);
+              res.send({ message: 'error in app.post(/addScore/)' });
+            } else {
+              console.log('POST successful');
+              res.send({ message: 'successfully run app.post(/addScore/)' });
+            }
+          }
+        );
+      }
+    });
+  
+});
+
+app.post('/showScore', (req, res) => {
+  const username = req.body.username;
+  const title = req.body.title;
+  const artist = req.body.artist;
+
+  db.all(
+    'SELECT * FROM score WHERE username=$username AND title=$title AND artist=$artist ORDERBY date',
+    {
+      $username: username,
       $title: title,
       $artist: artist
     },
-    (err) => {
-      if(err) {
-        console.log('error in POST', err);
-        res.send({message: 'error in app.post(/addScore/)'});
+    (err, rows) => {
+      if (rows.length > 0) {
+        res.send(rows[0]);
       } else {
-        console.log('POST successful');
-        res.send({message: 'successfully run app.post(/addScore/)'});
+        console.log('Error in POST /showScore');
+        res.send({});
       }
     }
   );
-})
+});

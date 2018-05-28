@@ -95,7 +95,7 @@ $(() => {
         $('#originalarea').html('Song is Complete!');
         $('#lineInput').val('');
         $('#hint').append('<p>Final Score: ' + finalScore + '</p>');
-        if (sessionStorage.username) {
+        if (sessionStorage.username && sessionStorage.username !== '') {
           $.ajax({
             url: 'addScore',
             type: 'POST',
