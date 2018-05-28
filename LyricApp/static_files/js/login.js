@@ -9,26 +9,27 @@ $(() => {
       isValidInput = false;
     }
 
-    if (isValidInput) {
-      const username = $('#login-username').val();
-      const password = $('#login-password').val();      
-      const URL = 'accounts/' + username + '/' + password;
+    if (isValidInput) {     
       $.ajax({
-        url: URL,
-        type: 'GET',
+        url: 'accounts',
+        type: 'POST',
         dataType: 'json',
+        data: {
+          username: $('#login-username').val(),
+          password: $('#login-password').val()
+        },
         success: (data) => {
           /* band-aid because the server should send an error code, not the client-side handling it */
           if (!data.username) {
-            $('#login-message').html("<p>Invalid Username or Password</p>");
+            $('#login-message').html('<p>Invalid Username or Password</p>');
           }
           else {
             sessionStorage.username = data.username;
             sessionStorage.password = data.password;
             
-            $('#login-message').html('<p>Welcome, ' + sessionStorage.username + "!</p>");
+            $('#login-message').html('<p>Welcome, ' + sessionStorage.username + '!</p>');
             $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');
-            $('#create-message').html("");
+            $('#create-message').html('');
           }
         }
       });
@@ -37,7 +38,7 @@ $(() => {
       $('#logout').css('display', 'block');
     }
     else {
-      $('#login-message').html("<p>Invalid Username or Password</p>");
+      $('#login-message').html('<p>Invalid Username or Password</p>');
     }
   });
   
@@ -51,14 +52,14 @@ $(() => {
     if (isLoggedIn) {
       $('#login').css('display', 'block');
       
-      $('#login-message').html(sessionStorage.username + " is now logged out.");
+      $('#login-message').html(sessionStorage.username + ' is now logged out.');
       $('#logout').css('display', 'none');
       
       sessionStorage.username  = '';
       sessionStorage.password = '';
     }
     else {
-      $('#login-message').html("No user currently signed in.");
+      $('#login-message').html('No user currently signed in.');
     }
   });
   
@@ -77,8 +78,8 @@ $(() => {
       const pass = $('#create-password').val();
       
       $.ajax({
-        url: "createAccount",
-        type: "POST",
+        url: 'createAccount',
+        type: 'POST',
         dataType: 'json',
         data: {
           username: user,
@@ -86,16 +87,16 @@ $(() => {
         },
         success: (data) => {
           if (!data.message) {            
-            $('#create-message').html(user + " account created.");
+            $('#create-message').html(user + ' account created.');
           }
           else {
-            $('#create-message').html("<p>" + data.message + "</p>");
+            $('#create-message').html('<p>' + data.message + '</p>');
           }
         }
       });
     }
     else {
-      $('#create-message').html("<p>Invalid Username or Password</p>");
+      $('#create-message').html('<p>Invalid Username or Password</p>');
     }
   });
   

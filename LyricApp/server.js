@@ -102,6 +102,7 @@ app.get('/topSongs', (req, res) => {
 
 // POST requests
 app.post('/addSong/', (req, res) => {
+  // TODO: implement song lyric update
   /*
   db.all('SELECT * FROM songs_to_lyrics WHERE title=$song AND artist=$artist',
   {
@@ -136,10 +137,10 @@ app.post('/addSong/', (req, res) => {
 });
 
 
-// GET for login form
-app.get('/accounts/:username/:password', (req, res) => {
-  const username = req.params.username;
-  const password = req.params.password;
+// verify account informations
+app.post('/accounts/', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
   console.log("Request username:", username);
   console.log("Request password:", password);
   db.all(
@@ -159,7 +160,7 @@ app.get('/accounts/:username/:password', (req, res) => {
   );
 });
 
-// POST for create a new account
+// create a new account
 app.post('/createAccount/', (req, res) => {
   db.run(
     'INSERT INTO account VALUES ($username, $password)',
@@ -178,3 +179,11 @@ app.post('/createAccount/', (req, res) => {
     }
   );
 });
+
+app.post('/addScore', (req, res) => {
+  const username = req.body.username;
+  const title = req.body.title;
+  const artist = req.body.artist;
+  const score = req.body.score;
+  // TODO: store that into the database.
+})
