@@ -25,7 +25,6 @@ $(() => {
           }
           else {
             sessionStorage.username = data.username;
-            sessionStorage.password = data.password;
             
             $('#login-message').html('<p>Welcome, ' + sessionStorage.username + '!</p>');
             $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');

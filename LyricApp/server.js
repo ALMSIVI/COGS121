@@ -166,7 +166,7 @@ app.post('/createAccount/', (req, res) => {
     'INSERT INTO account VALUES ($username, $password)',
     {
       $username: req.body.username,
-      $password: req.body.password,
+      $password: req.body.password
     },
     (err) => {
       if(err) {
@@ -185,5 +185,22 @@ app.post('/addScore', (req, res) => {
   const title = req.body.title;
   const artist = req.body.artist;
   const score = req.body.score;
-  // TODO: store that into the database.
+  db.run(
+    'INSERT INTO score VALUES ($username, $score, $title, $artist)',
+    {
+      $username: username,
+      $score: score,
+      $title: title,
+      $artist: artist
+    },
+    (err) => {
+      if(err) {
+        console.log('error in POST');
+        res.send({message: 'error in app.post(/addScore/)'});
+      } else {
+        console.log('POST successful');
+        res.send({message: 'successfully run app.post(/songs/)'});
+      }
+    }
+  );
 })
