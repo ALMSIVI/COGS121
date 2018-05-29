@@ -19,6 +19,7 @@ $(() => {
     }
 
     if (validated) {
+      $('#addStatus').html($('#newSong').val() + ' was successfully added');
       $.ajax({
         url: "addSong",
         type: "POST",
@@ -34,6 +35,7 @@ $(() => {
           console.log($('#newSong').val() + 'was successfully added.');
           //status later
         }
+
       });
     }
   });

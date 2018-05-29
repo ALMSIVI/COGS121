@@ -155,14 +155,12 @@ $(() => {
   function findWrong(input, correct) { // input = input line all caps, correct = correctline
     input = input.trim();
     const inputArray = input.split(' ');
-    const correctArray = correct.normalize('NFD').replace(/[\u0300-\u036f]/g, "").split(' ');
+    const correctArray = correct.normalize('NFD').replace(/[\u0300-\u036f]/g, "").split(' ');//filters diacritics
     let counter = 0;
     const limit = inputArray.length - 1;
     while (limit != counter && inputArray[counter] == correctArray[counter]) {
       counter++;
     }
-    console.log(inputArray[counter]);
-    console.log(correctArray[counter]);
     if (inputArray[counter] == correctArray[counter]) {
       return 'All Correct so Far!';
     } else {
