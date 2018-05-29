@@ -81,9 +81,11 @@ $(() => {
 
   /** Check if user input is correct. */
   $('#checkIfCorrect').click(() => {
-    const correctLineUpper = correctLine.toUpperCase();
-    const inputUpper = $('#lineInput').val().toUpperCase();
-    if (correctLineUpper === inputUpper) { // ignor case comparison
+    const correct = correctLine.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const input = $('#lineInput').val().toUpperCase();
+    console.log(input);
+    console.log(correct);
+    if (correct === input) { // ignor case comparison
       // lineCounter++;
       finalScore += 20;
       getNextLine();
@@ -153,12 +155,14 @@ $(() => {
   function findWrong(input, correct) { // input = input line all caps, correct = correctline
     input = input.trim();
     const inputArray = input.split(' ');
-    const correctArray = correct.split(' ');
+    const correctArray = correct.normalize('NFD').replace(/[\u0300-\u036f]/g, "").split(' ');
     let counter = 0;
     const limit = inputArray.length - 1;
     while (limit != counter && inputArray[counter] == correctArray[counter]) {
       counter++;
     }
+    console.log(inputArray[counter]);
+    console.log(correctArray[counter]);
     if (inputArray[counter] == correctArray[counter]) {
       return 'All Correct so Far!';
     } else {
