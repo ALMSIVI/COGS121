@@ -55,7 +55,6 @@ $(() => {
       $('#logout').css('display', 'none');
       
       sessionStorage.username  = '';
-      sessionStorage.password = '';
     }
     else {
       $('#login-message').html('No user currently signed in.');
@@ -82,7 +81,7 @@ $(() => {
         dataType: 'json',
         data: {
           username: user,
-          password: pass,
+          password: pass
         },
         success: (data) => {
           if (!data.message) {            

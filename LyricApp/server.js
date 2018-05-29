@@ -251,7 +251,7 @@ app.post('/showScore', (req, res) => {
   const artist = req.body.artist;
 
   db.all(
-    'SELECT * FROM score WHERE username=$username AND title=$title AND artist=$artist ORDERBY date',
+    'SELECT score, date FROM score WHERE username=$username AND title=$title AND artist=$artist ORDER BY date',
     {
       $username: username,
       $title: title,
@@ -261,7 +261,7 @@ app.post('/showScore', (req, res) => {
       if (rows.length > 0) {
         res.send({scores: rows});
       } else {
-        console.log('Error in POST /showScore');
+        console.log('Error in POST /showScore'); /* user tries to lookup a song that doesn't exist in the db, throws error */
         res.send({});
       }
     }
