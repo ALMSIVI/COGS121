@@ -1,7 +1,5 @@
 $(() => {
   const graphScore = (data, id, title, type) => {
-    console.log('data[0] is', data[0]);
-    console.log('data[1] is', data[1]);
     const trace = setTrace(data[0], data[1], 'rgb(55, 128, 191)', type);
 
     data = [trace];
@@ -37,8 +35,6 @@ $(() => {
   }
   else {
     user = sessionStorage.username;
-    console.log("Current user: " + user);
-    
     $('#scores-name').html('<p>Logged in as: ' + user + '.</p>');
   }
   
@@ -60,8 +56,6 @@ $(() => {
           artist: artist
         },
         success: (data) => {
-          console.log(data);
-          
           /* band-aid because the server should send an error code, not the client-side handling it */
           if (!data.scores) {
             $('#scores-graph').html('<p>No scores found for that song.</p>');
