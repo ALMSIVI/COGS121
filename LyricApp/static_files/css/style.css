@@ -9,6 +9,11 @@ html, body {
   font-size: 22px;
 
 }
+a:visited, a:link {
+    color: pink;
+}
+
+
 
 h1 {
   letter-spacing: 4px;
@@ -16,6 +21,12 @@ h1 {
   color: black;
 }
 
+p {
+  font-size: 20px;
+  width: 7cm;
+  color: white;
+  background-color: #2F2F71;
+}
 input {
   font-size: 18px;
   border-radius: 5px;
