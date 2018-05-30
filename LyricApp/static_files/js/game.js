@@ -104,9 +104,9 @@ $(() => {
             dataType: 'json',
             data: {
               username: sessionStorage.username,
+              score: finalScore,
               title: sessionStorage.title,
-              artist: sessionStorage.artist,
-              score: finalScore
+              artist: sessionStorage.artist
             },
             success: (data) => {
               console.log(data.message);

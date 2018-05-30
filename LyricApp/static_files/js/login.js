@@ -29,12 +29,12 @@ $(() => {
             $('#login-message').html('<p>Welcome, ' + sessionStorage.username + '!</p>');
             $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');
             $('#create-message').html('');
+            $('#login').css('display', 'none');
+            $('#logout').css('display', 'block');
           }
         }
       });
       
-      $('#login').css('display', 'none');
-      $('#logout').css('display', 'block');
     }
     else {
       $('#login-message').html('<p>Invalid Username or Password</p>');

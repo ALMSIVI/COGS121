@@ -222,7 +222,7 @@ app.post('/addScore', (req, res) => {
         }
       } else { // insert
         db.run(
-          'INSERT INTO score VALUES ($username, $score, $title, $artist AND date=$date)',
+          'INSERT INTO score VALUES ($username, $score, $title, $artist, $date)',
           {
             $username: username,
             $score: score,
@@ -249,7 +249,7 @@ app.post('/showScore', (req, res) => {
   const username = req.body.username;
   const title = req.body.title;
   const artist = req.body.artist;
-
+  
   db.all(
     'SELECT score, date FROM score WHERE username=$username AND title=$title AND artist=$artist ORDER BY date',
     {
