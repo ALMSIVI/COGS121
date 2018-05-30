@@ -29,8 +29,8 @@ $(() => {
     if (!title || !artist) {
       alert('Please enter both the title and the artist!');
     } else {
-      sessionStorage.setItem('artist', title);
-      sessionStorage.setItem('title', artist);
+      sessionStorage.setItem('artist', artist);
+      sessionStorage.setItem('title', title);
       window.location.href = 'LyricApp.html#game';
     }
   });
