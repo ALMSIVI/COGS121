@@ -15,5 +15,5 @@ We've improved a bit of the visualization by including our logo in the top heade
 
 ## Data visualization
 ### Scores
-![](Scores.JPG)
+![](Scores.PNG)
 ### Our visualization displays the user's score over time for the specific song they search up. 
