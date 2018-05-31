@@ -54,7 +54,7 @@ $(() => {
   // Search
   $('#scoreform').submit((e) => {
     e.preventDefault();
-    if (validateWeak('#scoreform', '#search-results')) {
+    if (validateWeak('#scoreform', '#searchResult')) {
       const title = $('#scoreform input[name=title]').val();
       const artist = $('#scoreform input[name=artist]').val();
       $.ajax({

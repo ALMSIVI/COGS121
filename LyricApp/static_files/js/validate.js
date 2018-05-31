@@ -23,7 +23,7 @@ function validateWeak(formId, messageId) {
   let validated = false;
   $(messageId).html('');
   $(formId + ' :input').each((index, element) => {
-    if (element.value !== '') { // empty
+    if (element.type !== 'submit' && element.value !== '') { // empty
       validated = true;
     }
   });
