@@ -17,12 +17,6 @@ $(() => {
     type: 'GET',
     dataType: 'json',
     success: (data) => {
-      /* band-aid because the server should send an error code, not the client-side handling it */
-      if (!data.tLyric) {
-        $('#error').html('<p>Song/Artist pair not found in the database.</p>');
-        $('#error').css('display', 'block');
-      } else {
-        $('#error').css('display', 'none');
         $('#transrace').css('display', 'block');
         $('#hint').html('');
         hintCounter = 0; // resetting all values if user selects new song

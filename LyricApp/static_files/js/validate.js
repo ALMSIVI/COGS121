@@ -7,8 +7,10 @@ function validate(formId, messageId) {
   $(formId + ' :input').each((index, element) => {
     $(element).removeClass('validate-error');
     if (element.value === '') { // empty
-      const name = element.name;
-      $(messageId).append(name + ' is required.');
+      const nameArray = element.name.split('-');
+      nameArray[0] = nameArray[0].charAt(0).toUpperCase() + nameArray[0].slice(1);
+      const name = nameArray.reduce((acc, cur) => acc + ' ' + cur);
+      $(messageId).append(name + ' is required. ');
       $(element).addClass('validate-error');
       validated = false;
     }

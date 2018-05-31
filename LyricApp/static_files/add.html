@@ -1,18 +1,18 @@
+<script src="/js/validate.js"></script>
 <script src="/js/add.js"></script>
 
-<div id="error"></div>
-
+<form id="addform">
 <div class="row">
   <div class="column">
-    Title: <input type="text" id="newSong">
-    Artist: <input type="text" id="newArtist">
-    Original Language of Song: <input type="text" id="newLanguage">
+    <label for="title">Title:</label> <input type="text" name="title">
+    <label for="artist">Artist:</label> <input type="text" name="artist">
+    <label for="language">Original Language of Song:</label> <input type="text" name="language">
   </div>
 </div>
 
 <div class="row">
   <div class="column">
-    <textarea id="lyrics" rows="15" cols="38" name="original" form="usrform" placeholder="Enter the lyrics of the original language here..."></textarea>
+    <textarea id="lyrics" rows="15" cols="38" name="original-lyrics" form="addform" placeholder="Enter the lyrics of the original language here..."></textarea>
   </div>
 
   <div class="help">
@@ -20,10 +20,10 @@
   </div>
 
   <div class="column">
-    <textarea id="translatedLyrics" rows="15" cols="38" name="translated" form="usrform" placeholder="Enter the lyrics of the translated language here..."></textarea>
+    <textarea id="translatedLyrics" rows="15" cols="38" name="translated-lyrics" form="addform" placeholder="Enter the lyrics of the translated language here..."></textarea>
   </div>
 </div>
 
-<button id="readLyrics">Save Song</button>
-
+<input type="submit" value="Save Song">
+</form>
 <div id="addStatus"></div>

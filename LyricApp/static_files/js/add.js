@@ -1,41 +1,22 @@
 $(() => {
-  $('#readLyrics').click(() => {
-    let validated = true;
-    if (!$('#newSong').val()) {
-      alert('Please enter song title!');
-      validated = false;
-    }
-    if (!$('#newArtist').val()) {
-      alert('Please enter artist!');
-      validated = false;
-    }
-    if (!$('#lyrics').val()) {
-      alert('Please enter lyrics!');
-      validated = false;
-    }
-    if (!$('#translatedLyrics').val()) {
-      alert('Please enter translated lyrics!');
-      validated = false;
-    }
-
-    if (validated) {
+  $('#addform').submit((e) => {
+    e.preventDefault();
+    if (validate('#addform', '#addStatus')) {
       $('#addStatus').html($('#newSong').val() + ' was successfully added');
       $.ajax({
         url: "addSong",
         type: "POST",
         dataType: 'json',
         data: {
-          title: $('#newSong').val(),
-          artist: $('#newArtist').val(),
-          language: $('#newLanguage').val(),
-          oLyric: $('#lyrics').val(),
-          tLyric: $('#translatedLyrics').val(),
+          title: $('#addform input[name=title]').val(),
+          artist: $('#addform input[name=artist]').val(),
+          language: $('#addform input[name=language]').val(),
+          oLyric: $('#addform input[name=original-lyric]').val(),
+          tLyric: $('#addform input[name=translated-lyric]').val(),
         },
         success: (data) => {
-          console.log($('#newSong').val() + 'was successfully added.');
-          //status later
+          $('#addStatus').html($('#addform input[name=artist]').val() + ' - ' + $('#addform input[name=title]').val() + 'was successfully added.');
         }
-
       });
     }
   });
