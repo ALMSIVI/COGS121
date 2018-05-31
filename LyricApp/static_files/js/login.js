@@ -1,43 +1,34 @@
 $(() => {
-  $('#login-submit').click(() => {
-    let isValidInput = true;
-    
-    if (!$('#login-username').val()) {
-      isValidInput = false;
-    }
-    if (!$('#login-password').val()) {
-      isValidInput = false;
-    }
-
-    if (isValidInput) {     
-      $.ajax({
-        url: 'accounts',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          username: $('#login-username').val(),
-          password: $('#login-password').val()
-        },
-        success: (data) => {
-          /* band-aid because the server should send an error code, not the client-side handling it */
-          if (!data.username) {
-            $('#login-message').html('<p>Invalid Username or Password</p>');
-          }
-          else {
-            sessionStorage.username = data.username;
-            
-            $('#login-message').html('<p>Welcome, ' + sessionStorage.username + '!</p>');
-            $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');
-            $('#create-message').html('');
-            $('#login').css('display', 'none');
-            $('#logout').css('display', 'block');
-          }
+  function login(username, password) {
+    $.ajax({
+      url: 'accounts',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        username: username,
+        password: password
+      },
+      success: (data) => {
+        /* band-aid because the server should send an error code, not the client-side handling it */
+        if (!data.username) {
+          $('#login-message').html('<p>Invalid Username or Password</p>');
+        } else {
+          sessionStorage.username = data.username;
+          $('#login-message').html('<p>Welcome, ' + sessionStorage.username + '!</p>');
+          $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');
+          $('#create-message').html('');
+          $('#login').css('display', 'none');
+          $('#logout').css('display', 'block');
         }
-      });
-      
-    }
-    else {
-      $('#login-message').html('<p>Invalid Username or Password</p>');
+      }
+    });
+  }
+
+  // Login form
+  $('#login').submit((e) => {
+    e.preventDefault();
+    if (validate('#login', '#login-message')) {
+       login($('#login input[name=username]').val(), $('#login input[name=password]').val());
     }
   });
   
@@ -54,55 +45,41 @@ $(() => {
       $('#login-message').html(sessionStorage.username + ' is now logged out.');
       $('#logout').css('display', 'none');
       
-      sessionStorage.username  = '';
+      sessionStorage.username = '';
     }
     else {
       $('#login-message').html('No user currently signed in.');
     }
   });
   
-  $('#create-submit').click(() => {
-    let isValidInput = true;
-    
-    if (!$('#create-username').val()) {
-      isValidInput = false;
-    }
-    if (!$('#create-password').val()) {
-      isValidInput = false;
-    }
-    
-    if (isValidInput) {
-      const user = $('#create-username').val();
-      const pass = $('#create-password').val();
-      
+  // Sign up/Create Account form
+  $('#signup').submit((e) => {
+    e.preventDefault();
+    if (validate('#signup', '#create-message')) {
+      const username = $('#signup input[name=username]').val();
+      const password = $('#signup input[name=password]').val();
       $.ajax({
         url: 'createAccount',
         type: 'POST',
         dataType: 'json',
         data: {
-          username: user,
-          password: pass
+          username: username,
+          password: password
         },
         success: (data) => {
-          if (!data.message) {            
-            $('#create-message').html(user + ' account created.');
-          }
-          else {
-            $('#create-message').html('<p>' + data.message + '</p>');
+          $('#create-message').html('<p>' + data.message + '</p>');
+          if (data.status) {
+            login(username, password);
           }
         }
       });
-    }
-    else {
-      $('#create-message').html('<p>Invalid Username or Password</p>');
     }
   });
   
   if (!sessionStorage.username || sessionStorage.username === '') {
     $('#login').css('display', 'block');
     $('#logout').css('display', 'none');
-  }
-  else {
+  } else {
     $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');
     $('#login').css('display', 'none');
     $('#logout').css('display', 'block');

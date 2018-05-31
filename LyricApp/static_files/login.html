@@ -1,32 +1,39 @@
+<script src="/js/validate.js"></script>
 <script src="/js/login.js"></script>
 
 <div id="login-form">
-  <div id="login">
+  <form id="login">
     <p>Login</p>
     <p>
-      Username: <input type="text" id="login-username">
-      Password: <input type="password" id="login-password">
-      <button id="login-submit">Login</button>
+      <label for="username">Username:</label>
+      <input type="text" name="username">
+      <label for="password">Password:</label>
+      <input type="password" name="password">
+      <input type="submit" value="Login">
     </p>
-  </div>
-    
+  </form>
+
   <div id="logout">
     <div id="logout-text"></div>
     <button id="logout-submit">Logout</button>
   </div>
-  
+
   <div id="login-message"></div>
 </div>
 
-<hr/>
+<hr>
 
 <div id="create-form">
-  <p>Create an Account</p>
-  <p>
-    Username: <input type="text" id="create-username">
-    Password: <input type="password" id="create-password">
-    <button id="create-submit">Go!</button>
-  </p>
+  <form id="signup">
+    <p>Create an Account</p>
+    <p>
+      <label for="username">Username:</label>
+      <input type="text" name="username">
+      <label for="password">Password:</label>
+      <input type="password" name="password">
+      <input type="submit" id="create-submit" value="Create Account!">
+    </p>
+  </form>
   <div id="create-message"></div>
 </div>
 

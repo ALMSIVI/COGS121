@@ -44,10 +44,6 @@ hr {
   padding-bottom: 40px; /* band-aid fix for navbar obscuring button */
 }
 
-#checkIfCorrect {
-  display: none;
-}
-
 .row {
   display: flex;
 }
@@ -68,7 +64,7 @@ hr {
   font-weight: bolder;
 }
 
-#choosesong {
+#search {
   font-weight: bolder;
 }
 .pause {
@@ -151,7 +147,6 @@ li a:hover {
 .listSong {
   display: inline;
   padding: 2px;
-  width: 200px;
   color: #2F2F71;
 }
 
@@ -171,4 +166,14 @@ li a:hover {
     opacity: 1;
     transform: rotateX(0deg);
   }
+}
+
+.validate-error {
+  color: #B94A48;
+  background-color: #F2DEDE;
+  border: 1px solid #EED3D7;
+}
+
+form * {
+  margin: 5px;
 }

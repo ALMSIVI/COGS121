@@ -1,18 +1,23 @@
+<script src="/js/validate.js"></script>
 <script src="/js/list.js"></script>
 
-<div id="choosesong">
+<form id="search">
   <p>Choose Your Song</p>
   <br/>
-  Title: <input type="text" id="songTitle">
-  Artist: <input type="text" id="songArtist">
-  <button id="songSelection">Load Up</button>
-  <div id="error"></div>
-</div>
+  <p>
+    <label for="title">Title:</label>
+    <input type="text" name="title">
+    <label for="artist">Artist:</label>
+    <input type="text" name="artist">
+    <input type="submit" value="Load Up">
+  </p>
+</form>
 
 <hr/>
 
+<div id="searchResult">
+</div>
 <div id="topSongs">
   <h3>Most Played Songs</h3>
-  <ol id="songList">
-  </ol>
+  <ol id="song-list"></ol>
 </div>

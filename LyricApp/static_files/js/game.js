@@ -10,56 +10,37 @@ $(() => {
   let inputLength = 0; // used for hint to see if user is still on the same word
 
   /** Check if the user comes from the find page; if so, render with sessionStorage */
-  if (sessionStorage.title && sessionStorage.artist) {
-    render(sessionStorage.title, sessionStorage.artist);
-  }
 
-  /** Once the user clicks load up, render with user input */
-  $('#songSelection').click(() => {
-    const title = $('#songTitle').val();
-    const artist = $('#songArtist').val();
-    if (!title || !artist) {
-      alert('Please enter both the title and the artist!');
-    } else {
-      sessionStorage.setItem('title', title);
-      sessionStorage.setItem('artist', artist);
-      render(title, artist);
+  const songSelectURL = 'songs/' + sessionStorage.title + '/' + sessionStorage.artist;
+  $.ajax({
+    url: songSelectURL,
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+      /* band-aid because the server should send an error code, not the client-side handling it */
+      if (!data.tLyric) {
+        $('#error').html('<p>Song/Artist pair not found in the database.</p>');
+        $('#error').css('display', 'block');
+      } else {
+        $('#error').css('display', 'none');
+        $('#transrace').css('display', 'block');
+        $('#hint').html('');
+        hintCounter = 0; // resetting all values if user selects new song
+        finalScore = 100;
+        complete = 'Not Complete';
+        lineCounter = 0;
+        nextLine = data.tLyric.split('\n')[0];
+        correctLine = data.oLyric.split('\n')[0];
+        correctLine = correctLine.replace(/\s+/g, ' ').trim();
+        translatedLyrics = data.tLyric;
+        originalLyrics = data.oLyric;
+        hintUrl += data.language + '/';
+        $('#originalarea').html('<p>Translated Lyrics: \n' + '<pre>' + nextLine + '</pre></p>');
+
+        //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
+      }
     }
   });
-
-  /** Connects to the back end and populates the game */
-  function render(title, artist) {
-    const songSelectURL = 'songs/' + title + '/' + artist;
-    $.ajax({
-      url: songSelectURL,
-      type: 'GET',
-      dataType: 'json',
-      success: (data) => {
-        /* band-aid because the server should send an error code, not the client-side handling it */
-        if (!data.tLyric) {
-          $('#error').html('<p>Song/Artist pair not found in the database.</p>');
-          $('#error').css('display', 'block');
-        } else {
-          $('#error').css('display', 'none');
-          $('#transrace').css('display', 'block');
-          $('#hint').html('');
-          hintCounter = 0; // resetting all values if user selects new song
-          finalScore = 100;
-          complete = 'Not Complete';
-          lineCounter = 0;
-          nextLine = data.tLyric.split('\n')[0];
-          correctLine = data.oLyric.split('\n')[0];
-          correctLine = correctLine.replace(/\s+/g, ' ').trim();
-          translatedLyrics = data.tLyric;
-          originalLyrics = data.oLyric;
-          hintUrl += data.language + '/';
-          $('#originalarea').html('<p>Translated Lyrics: \n' + '<pre>' + nextLine + '</pre></p>');
-
-          //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
-        }
-      }
-    });
-  }
 
   /** Handles different key inputs */
   $('#lineInput').keyup((event) => {
@@ -74,7 +55,7 @@ $(() => {
         $('#hint').html(wordCheck);
         break;
       case 18: // Alt key
-        getHint();
+        $('#btnhint').click();
         break;
     }
   });
@@ -168,7 +149,7 @@ $(() => {
     }
   }
 
-  function getHint() {
+  $('#btnhint').click(() => {
     const inputArray = $('#lineInput').val().split(' ');
     const hints = correctLine.split(' ');
     if (inputLength != inputArray.length) { // first hint
@@ -191,7 +172,7 @@ $(() => {
     }
 
     //return hints[inputArray.length - 1];
-  }
+  });
 
 
   /*$('#readLyrics').click(() => {

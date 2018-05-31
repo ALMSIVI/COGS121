@@ -11,27 +11,13 @@ app.listen(3000, () => {
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('Transracer.db');
 
-// Body parser
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// Google translate
-const translate = require('google-translate-api');
-
 // GET requests
-app.get('/songs', (req, res) => {
-  db.all('SELECT title FROM songs_to_lyrics', (err, rows) => {
-    console.log(rows);
-    const allSongs = rows.map(e => e.title);
-    console.log(allSongs);
-    res.send(allSongs);
-  });
-  //const allSongtitles = Object.keys(songDatabase);
-  //console.log('songs are:', songDatabase);
-  //res.send(allSongtitles);
+/** Redirects the user to the home page. */
+app.get('/', (req, res) => {
+  res.redirect('/LyricApp.html');
 });
 
+/** Get the exact song with the title and artist. */
 app.get('/songs/:title/:artist', (req, res) => {
   const nameToLookup = req.params.title;
   const artistToLookup = req.params.artist;
@@ -44,7 +30,6 @@ app.get('/songs/:title/:artist', (req, res) => {
       $artist: artistToLookup
     },
     (err, rows) => {
-      //console.log(rows);
       if (rows.length > 0) {
         db.run('UPDATE songs_to_lyrics SET score=$newscore WHERE artist=$artist AND title=$title',
           {
@@ -61,11 +46,9 @@ app.get('/songs/:title/:artist', (req, res) => {
 });
 
 
-app.get('/', (req, res) => {
-  res.redirect('/LyricApp.html');
-});
-
-/** API reference: https://www.npmjs.com/package/google-translate-api */
+/** Translates a word from another language into English.
+ * API reference: https://www.npmjs.com/package/google-translate-api */
+const translate = require('google-translate-api');
 app.get('/words/:lang/:word', (req, res) => { //switched lang with word
   translate(req.params.word,
     {
@@ -81,11 +64,11 @@ app.get('/words/:lang/:word', (req, res) => { //switched lang with word
     });
 });
 
+/** Get a list of songs with the top search score. */
 app.get('/topSongs', (req, res) => {
   db.all(
     'SELECT * FROM songs_to_lyrics ORDER BY score DESC',
     (err, rows) => {
-      console.log(rows);
       const songs = rows.map((e) => {
         const song = {
           title: e.title,
@@ -100,21 +83,36 @@ app.get('/topSongs', (req, res) => {
   );
 });
 
+
 // POST requests
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+/** Adds a song to the library; updates the lyric base if the song exists. */
 app.post('/addSong/', (req, res) => {
-  // TODO: implement song lyric update
-  /*
-  db.all('SELECT * FROM songs_to_lyrics WHERE title=$song AND artist=$artist',
-  {
-    $song: req.body.title,
-    $artist: req.body.artist
-  },
-  (err, rows) => {
-    if (rows.length > 0) {
-      db.run('UPDATE songs_to_lyrics SET ')
+  db.all('SELECT * FROM songs_to_lyrics WHERE title=$song AND artist=$artist AND language=$language',
+    {
+      $song: req.body.title,
+      $artist: req.body.artist,
+      $language: req.body.language
+    },
+    (err, rows) => {
+      if (rows.length > 0) {
+        db.run('UPDATE songs_to_lyrics SET oLyric=$oLyric, tLyric=$tLyric WHERE title=$song AND artist=$artist AND language=$language', {
+          $title: req.body.title,
+          $artist: req.body.artist,
+          $language: req.body.language,
+          $oLyric: req.body.oLyric,
+          $tLyric: req.body.tLyric
+        },
+          (err) => {
+            if (err) {
+              console.log('ERROR', err);
+            }
+          });
+      }
     }
-  });
-  */
+  );
   db.run(
     'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric, 0)',
     {
@@ -137,12 +135,10 @@ app.post('/addSong/', (req, res) => {
 });
 
 
-// verify account informations
+/** Login account verification. */
 app.post('/accounts/', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  console.log("Request username:", username);
-  console.log("Request password:", password);
   db.all(
     'SELECT * FROM account WHERE username=$username AND password=$password',
     {
@@ -150,7 +146,6 @@ app.post('/accounts/', (req, res) => {
       $password: password
     },
     (err, rows) => {
-      console.log(rows);
       if (rows.length > 0) {
         res.send(rows[0]);
       } else {
@@ -160,7 +155,7 @@ app.post('/accounts/', (req, res) => {
   );
 });
 
-// create a new account
+/** Create a new account. */
 app.post('/createAccount/', (req, res) => {
   db.run(
     'INSERT INTO account VALUES ($username, $password)',
@@ -171,16 +166,22 @@ app.post('/createAccount/', (req, res) => {
     (err) => {
       if (err) {
         console.log('error in POST');
-        res.send({ message: 'ERROR: Username already in use' });
+        res.send({
+          message: 'ERROR: Username already in use',
+          status: false
+        });
       } else {
         console.log('POST successful');
-        res.send({ message: 'Account for \'' + req.body.username + '\' successfully created' });
+        res.send({
+          message: 'Account for \'' + req.body.username + '\' successfully created',
+          status: true
+        });
       }
     }
   );
 });
 
-// Update score.
+/** Update the user's game score. */
 const moment = require('moment');
 app.post('/addScore', (req, res) => {
   const username = req.body.username;
@@ -242,14 +243,15 @@ app.post('/addScore', (req, res) => {
         );
       }
     });
-  
+
 });
 
+/** Displays the user's score for a specific song. */
 app.post('/showScore', (req, res) => {
   const username = req.body.username;
   const title = req.body.title;
   const artist = req.body.artist;
-  
+
   db.all(
     'SELECT score, date FROM score WHERE username=$username AND title=$title AND artist=$artist ORDER BY date',
     {
@@ -259,11 +261,62 @@ app.post('/showScore', (req, res) => {
     },
     (err, rows) => {
       if (rows.length > 0) {
-        res.send({scores: rows});
+        res.send({ scores: rows });
       } else {
         console.log('Error in POST /showScore'); /* user tries to lookup a song that doesn't exist in the db, throws error */
         res.send({});
       }
     }
   );
+});
+
+/** Searches for a song based on title OR artist. */
+app.post('/search', (req, res) => {
+  const title = req.body.title;
+  const artist = req.body.artist;
+  // Front-end validation guarantees that at least one is nonempty.
+  if (title === '') {
+    db.all('SELECT * FROM songs_to_lyrics WHERE artist=$artist',
+      {
+        $artist: artist
+      },
+      (err, rows) => {
+        if (err) {
+          res.send({ status: false, message: 'Error in /POST' });
+        } else if (rows.length === 0) {
+          res.send({ status: false, message: 'Artist ' + artist + ' not found.' });
+        } else {
+          res.send({ status: true, unique: false, songs: rows });
+        }
+      });
+  } else if (artist === '') {
+    db.all('SELECT * FROM songs_to_lyrics WHERE title=$title',
+    {
+      $title: title
+    },
+    (err, rows) => {
+      if (err) {
+        res.send({ status: false, message: 'Error in /POST' });
+      } else if (rows.length === 0) {
+        res.send({ status: false, message: 'Title ' + title + ' not found.' });
+      } else {
+        res.send({ status: true, unique: false, songs: rows });
+      }
+    });
+  } else {
+    db.all('SELECT * FROM songs_to_lyrics WHERE artist=$artist AND title=$title',
+    {
+      $artist: artist,
+      $title: title
+    },
+    (err, rows) => {
+      if (err) {
+        res.send({ status: false, message: 'Error in /POST' });
+      } else if (rows.length === 0) {
+        res.send({ status: false, message: 'Song: ' + artist + ' - ' + title + ' not found.' });
+      } else {
+        res.send({ status: true, unique: true, songs: rows });
+      }
+    });
+  }
 });
