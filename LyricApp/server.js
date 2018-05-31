@@ -97,7 +97,7 @@ app.post('/addSong/', (req, res) => {
       $language: req.body.language
     },
     (err, rows) => {
-      if (rows.length > 0) {
+      if (rows.length > 0) { // update
         db.run('UPDATE songs_to_lyrics SET oLyric=$oLyric, tLyric=$tLyric WHERE title=$song AND artist=$artist AND language=$language', {
           $title: req.body.title,
           $artist: req.body.artist,
@@ -107,31 +107,37 @@ app.post('/addSong/', (req, res) => {
         },
           (err) => {
             if (err) {
-              console.log('ERROR', err);
+              console.log('error in POST /addSong');
+              res.send({ status: false, message: 'Error in app.post(/addSong)' });
+            } else {
+              console.log('POST successful');
+              res.send({ status: true, insert: false});
             }
           });
+      } else { // insert
+        db.run(
+          'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric, 0)',
+          {
+            $title: req.body.title,
+            $artist: req.body.artist,
+            $language: req.body.language,
+            $oLyric: req.body.oLyric,
+            $tLyric: req.body.tLyric
+          },
+          (err) => {
+            if (err) {
+              console.log('error in POST');
+              res.send({ status: false, message: 'Error in app.post(/addSong)' });
+            } else {
+              console.log('POST successful');
+              res.send({ status: true, insert: true});
+            }
+          }
+        );
       }
     }
   );
-  db.run(
-    'INSERT INTO songs_to_lyrics VALUES ($title, $artist, $language, $oLyric, $tLyric, 0)',
-    {
-      $title: req.body.title,
-      $artist: req.body.artist,
-      $language: req.body.language,
-      $oLyric: req.body.oLyric,
-      $tLyric: req.body.tLyric
-    },
-    (err) => {
-      if (err) {
-        console.log('error in POST');
-        res.send({ message: 'error in app.post(/songs/)' });
-      } else {
-        console.log('POST successful');
-        res.send({ message: 'successfully run app.post(/song/)' });
-      }
-    }
-  );
+  
 });
 
 

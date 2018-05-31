@@ -2,7 +2,6 @@ $(() => {
   $('#addform').submit((e) => {
     e.preventDefault();
     if (validate('#addform', '#addStatus')) {
-      $('#addStatus').html($('#newSong').val() + ' was successfully added');
       $.ajax({
         url: "addSong",
         type: "POST",
@@ -15,7 +14,13 @@ $(() => {
           tLyric: $('#addform input[name=translated-lyric]').val(),
         },
         success: (data) => {
-          $('#addStatus').html($('#addform input[name=artist]').val() + ' - ' + $('#addform input[name=title]').val() + 'was successfully added.');
+          if (!data.status) {
+            $('#addStatus').html(data.message);
+          } else if (data.insert) {
+            $('#addStatus').html($('#addform input[name=artist]').val() + ' - ' + $('#addform input[name=title]').val() + ' was successfully added.');
+          } else {
+            $('#addStatus').html($('#addform input[name=artist]').val() + ' - ' + $('#addform input[name=title]').val() + ' was successfully updated.');
+          }
         }
       });
     }
