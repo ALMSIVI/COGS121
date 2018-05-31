@@ -16,7 +16,7 @@ $(() => {
           sessionStorage.username = data.username;
           $('#login-message').html('<p>Welcome, ' + sessionStorage.username + '!</p>');
           $('#logout-text').html('<p>Currently logged in as: ' + sessionStorage.username + '</p>');
-          $('#create-message').html('');
+          $('#create-message').empty();
           $('#login').css('display', 'none');
           $('#logout').css('display', 'block');
         }

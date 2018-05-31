@@ -27,7 +27,7 @@ $(() => {
           artist: artist
         },
         success: (data) => {
-          $('#searchResult').html('');
+          $('#searchResult').empty();
           if (!data.status) {
             $('#searchResult').html(data.message);
           } else if (data.unique) {

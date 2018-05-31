@@ -18,7 +18,7 @@ $(() => {
     dataType: 'json',
     success: (data) => {
         $('#transrace').css('display', 'block');
-        $('#hint').html('');
+        $('#hint').empty();
         hintCounter = 0; // resetting all values if user selects new song
         finalScore = 100;
         complete = 'Not Complete';
@@ -67,7 +67,7 @@ $(() => {
       if (complete === 'Not Complete') {
         $('#originalarea').html('Original: \n' + '<pre>' + nextLine + '</pre>');
         $('#lineInput').val('');
-        $('#hint').html('');
+        $('#hint').empty();
       } else { // Song is completed
         $('#originalarea').html('Song is Complete!');
         $('#lineInput').val('');

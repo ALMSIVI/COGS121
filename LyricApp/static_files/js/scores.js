@@ -1,4 +1,5 @@
 $(() => {
+  // Graphing
   const graphScore = (data, id, title, type) => {
     const trace = setTrace(data[0], data[1], 'rgb(55, 128, 191)', type);
 
@@ -38,12 +39,57 @@ $(() => {
     $('#scores-name').html('<p>Logged in as: ' + user + '.</p>');
   }
 
-  // Validation
-  $('#result-list').append('<li>WARNING: FUNCTIONALITY NOT COMPLETE. NO VALIDATION FOR EMPTY INPUTS.</li>');
+  // Showing top songs
+  $.ajax({
+    url: '/topSongs',
+    type: 'GET',
+    datatype: 'json',
+    success: (data) => {
+      data.songs.forEach((e) => {
+        $('#song-list').append('<li><a href="/" class="listSong">' + e.artist + ' - ' + e.title + '</a></li><br>');
+      });
+    }
+  });
+
+  // Search
   $('#scoreform').submit((e) => {
     e.preventDefault();
-    const title = $('#scoreform input[name=title]').val();
-    const artist = $('#scoreform input[name=artist]').val();
+    if (validateWeak('#scoreform', '#search-results')) {
+      const title = $('#scoreform input[name=title]').val();
+      const artist = $('#scoreform input[name=artist]').val();
+      $.ajax({
+        url: '/search',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+          title: title,
+          artist: artist
+        },
+        success: (data) => {
+          $('#searchResult').empty();
+          if (!data.status) {
+            $('#searchResult').html(data.message);
+          } else if (data.unique) {
+            getScoreAndGraph(title, artist);
+          } else {
+            $('#searchResult').html('<h3>Search Results:</h3><ul id=song-list></ul>');
+            data.songs.forEach((e) => {
+              $('#song-list').append('<li><a href="/" class="listSong">' + e.artist + ' - ' + e.title + '</a></li><br>');
+            });
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '.listSong', (e) => {
+    e.preventDefault();
+    const songId = $(event.target).text();
+    const splitted = songId.split(' - ');
+    getScoreAndGraph(splitted[1], splitted[0]);
+  });
+
+  function getScoreAndGraph(title, artist) {
     $.ajax({
       url: 'showScore',
       type: 'POST',
@@ -56,6 +102,7 @@ $(() => {
       success: (data) => {
         /* band-aid because the server should send an error code, not the client-side handling it */
         if (!data.scores) {
+          $('#scores-description').empty();
           $('#scores-graph').html('<p>No scores found for that song.</p>');
         } else {
           data = data.scores;
@@ -73,5 +120,5 @@ $(() => {
         }
       }
     });
-  });
+  }
 });

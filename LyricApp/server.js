@@ -269,7 +269,7 @@ app.post('/showScore', (req, res) => {
       if (rows.length > 0) {
         res.send({ scores: rows });
       } else {
-        console.log('Error in POST /showScore'); /* user tries to lookup a song that doesn't exist in the db, throws error */
+        console.log('Song doesn\'t exist while POSTing /showScore'); // user tries to lookup a song that doesn't exist in the db, throws error
         res.send({});
       }
     }
