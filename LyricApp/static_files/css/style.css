@@ -6,7 +6,6 @@ html, body {
   margin-bottom: 35px;
   font-family: "Lucida Console"; /* was "ucida Console" ??? not sure if intended */
   font-size: 22px;
-
 }
 
 a:visited, a:link {
@@ -37,7 +36,10 @@ input {
 hr {
   margin-bottom: 40px;
 }
-
+#game{
+  background-image: url("../speed.jpg");
+  background-size: 100% 100%;
+}
 #content {
   width: 100%;
   height: 100%;
@@ -55,6 +57,7 @@ hr {
 }
 
 #transrace {
+  color: white;
   animation: transrace 1s;
   -webkit-animation: transrace 1s;
 }
