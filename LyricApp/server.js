@@ -45,6 +45,29 @@ app.get('/songs/:title/:artist', (req, res) => {
   );
 });
 
+/** Get the average score of the song ordered by date. */
+app.get('/average/:title/:artist', (req, res) => {
+  const nameToLookup = req.params.title;
+  const artistToLookup = req.params.artist;
+  console.log("Request name:", nameToLookup);
+  console.log("Request artist:", artistToLookup);
+  db.all(
+    'SELECT AVG(score) AS "Score", date AS "Date" FROM score WHERE title=$song AND artist=$artist GROUP BY date',
+    {
+      $song: nameToLookup,
+      $artist: artistToLookup
+    },
+    (err, rows) => {
+      if (rows.length > 0) {
+        console.log('GET /average: score found for song ' + artistToLookup + ' - ' + nameToLookup);
+        res.send({scores: rows});
+      } else {
+        console.log('GET /average: No score found for any user for song ' + artistToLookup + ' - ' + nameToLookup);
+        res.send({});
+      }
+    }
+  );
+});
 
 /** Translates a word from another language into English.
  * API reference: https://www.npmjs.com/package/google-translate-api */
