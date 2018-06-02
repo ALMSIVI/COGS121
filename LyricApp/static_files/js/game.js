@@ -34,7 +34,7 @@ $(() => {
         //$('#translatedarea').html('Translated: \n' + '<pre>' + data.translated + '</pre>');
       }
     }
-  });
+  );
 
   /** Handles different key inputs */
   $('#lineInput').keyup((event) => {

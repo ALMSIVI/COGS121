@@ -155,6 +155,18 @@ li a:hover {
   padding: 2px;
 }
 
+.scoreSong {
+  display: inline;
+  padding: 2px;
+  color: #2F2F71;
+}
+
+.scoreSong:hover{
+  color: white;
+  background-color: #111;
+  padding: 2px;
+}
+
 @keyframes transrace {
   0% {
     opacity: 0;

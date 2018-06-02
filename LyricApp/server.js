@@ -52,7 +52,7 @@ app.get('/average/:title/:artist', (req, res) => {
   console.log("Request name:", nameToLookup);
   console.log("Request artist:", artistToLookup);
   db.all(
-    'SELECT AVG(score) AS "Score", date AS "Date" FROM score WHERE title=$song AND artist=$artist GROUP BY date',
+    'SELECT AVG(score) as "score", date FROM score WHERE title=$song AND artist=$artist GROUP BY date',
     {
       $song: nameToLookup,
       $artist: artistToLookup
