@@ -73,6 +73,7 @@ $(() => {
           artist: artist
         },
         success: (data) => {
+          clearGraphs();
           $('#searchResult').empty();
           if (!data.status) {
             $('#searchResult').html(data.message);
@@ -92,7 +93,6 @@ $(() => {
 
   $(document).on('click', '.scoreSong', (e) => {
     e.preventDefault();
-    clearGraphs();
     const songId = $(event.target).text();
     const splitted = songId.split(' - ');
     graphUserScores(splitted[1], splitted[0]);
