@@ -93,6 +93,7 @@ $(() => {
 
   $(document).on('click', '.scoreSong', (e) => {
     e.preventDefault();
+    clearGraphs();
     const songId = $(event.target).text();
     const splitted = songId.split(' - ');
     graphUserScores(splitted[1], splitted[0]);
