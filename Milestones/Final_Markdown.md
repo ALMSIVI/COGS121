@@ -17,17 +17,25 @@
 		- navbar
 		- logo
 		- color
+    - images
 		- css/styling
 - William Chu
 	- Implemented user/account features
 	- Stored scores in database and implemented data visualization
 	- Fixed bugs and improved features related to user and score database
+  - Worked with design and styling
+    - reordering pages
+    - organizing page content
+    - css/styling
+  - Code integrity and app testing
 - Yue Wue
 	- Found and implemented APIs such as google translate
 	- Improved and fixed bugs for the database
 	- Worked with input formatting such as case insensitivity 
 	- Worked with showing top songs 
-	- Worked wth form validation
+	- Worked wth form validation and input sanitization
+  - Code integrity and app testing
+    - converting vanilla JS to ES6 standards
 
 
 
@@ -63,7 +71,7 @@
 
 - HTML
 	- LyricApp
-		- Adds scripts, ids, and basic styling to entire app
+		- Adds scripts, ids, and basic styling to entire app, contains the navbar
 	- add
 		- page where user adds song info such as lyrics, language, and artist
 	- find
