@@ -1,39 +1,40 @@
 # Final Markdown
 ## Team Members and Contributions 
 - Giovanni Aguirre
-	- Designed game 
-		- store and present lyrics line by line
-		- check user input and give hints
-		- formatted input and output text
-		- designed score system
-	- Basic Html
-		- started html layout for main features
-	- Fixed some bugs
-		- filtered diacritics
-		- fixed bugs related to hint function
+  - Designed game 
+  	- store and present lyrics line by line
+  	- check user input and give hints
+  	- formatted input and output text
+  	- designed score system
+  - Basic Html
+  	- started html layout for main features
+  - Fixed some bugs
+  	- filtered diacritics
+  	- fixed bugs related to hint function
 - Irene Garcia
-	- Created most markdowns and demo video
-	- Worked with design and styling
-		- navbar
-		- logo
-		- color
+  - Created most markdowns and demo video
+  - Worked with design and styling
+  	- navbar
+  	- logo
+  	- color
     - images
-		- css/styling
-- William Chu
-	- Implemented user/account features
-	- Stored scores in database and implemented data visualization
-	- Fixed bugs and improved features related to user and score database
+  	- css/styling
+- William Zhu
+  - Implemented user/account features
+  - Stored scores in database and implemented data visualization
+  - Fixed bugs and improved features related to user and score database
   - Worked with design and styling
     - reordering pages
     - organizing page content
     - css/styling
   - Code integrity and app testing
-- Yue Wue
-	- Found and implemented APIs such as google translate
-	- Improved and fixed bugs for the database
-	- Worked with input formatting such as case insensitivity 
-	- Worked with showing top songs 
-	- Worked wth form validation and input sanitization
+- Yue Wu
+  - Found and implemented APIs such as google translate
+  - Improved and fixed bugs for the database
+  - Worked with input formatting such as case insensitivity
+  - Worked with showing top songs
+  - Worked with database searching
+  - Worked with form validation and input sanitization
   - Code integrity and app testing
     - converting vanilla JS to ES6 standards
 
@@ -82,7 +83,7 @@
 		- page where user inputs there login info
 	- scores
 		- page where scores are displayed
-		
+	
 - CSS
 	- style
 		- has most of the styling for the app such as placement, color, and text style
