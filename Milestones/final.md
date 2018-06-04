@@ -43,47 +43,53 @@
 ## Files Written by Us
 
 - JS
-	- server
-		- links with database being able to get and post information to and from the database
-		
-	- create_db
-		- creates a database with variables of song, artist, user info, scores, language
-	
-	- add
-		- collects user info for song entry including lyrics, title, artist, and language
+  - server
+  	- links with database being able to get and post information to and from the database
+  	
+  - create_db
+  	- creates a database with variables of song, artist, user info, scores, language
 
-	- changePage
-		- changes page of the website called by the navbar
+  - add
+  	- collects user info for song entry including lyrics, title, artist, and language
 
-	- game
-		- gets song user asks for, starts game by displaying song lyric line by line as it gets user input and checks if it is correct. Also gives hints to the user.
+  - changePage
+  	- changes page of the website called by the navbar
 
-	- list
-		- used for the top songs on the game page and records each time a song is played.
+  - game
+  	- gets song user asks for, starts game by displaying song lyric line by line as it gets user input and checks if it is correct. Also gives hints to the user.
 
-	- login
-		- works with user login and puts info into database
+  - list
+  	- used for the top songs on the game page and records each time a song is played.
 
-	- scores
-		- gets scores from database and graphs them.
+  - login
+  	- works with user login and puts info into database
 
-	- validate
-		- validates user input on the add page ensuring all fields are filled
+  - scores
+  	- gets scores from database and graphs them.
+
+  - validate
+  	- validates user input on the add page ensuring all fields are filled
 
 - HTML
-	- LyricApp
-		- Adds scripts, ids, and basic styling to entire app, contains the navbar
-	- add
-		- page where user adds song info such as lyrics, language, and artist
-	- find
-		- page where user can either select one of the most popular songs or enter a song thats in the database
-	- game
-		- page where the main game is played as it displays the song lyrics to be translated, is where the user inputs the original lyrics and is able to see hints for the next lyric
-	- login
-		- page where user inputs there login info
-	- scores
-		- page where scores are displayed
-	
+  - LyricApp
+  	- Adds scripts, ids, and basic styling to entire app, contains the navbar
+  - add
+  	- page where user adds song info such as lyrics, language, and artist
+  - find
+  	- page where user can either select one of the most popular songs or enter a song thats in the database
+  - game
+  	- page where the main game is played as it displays the song lyrics to be translated, is where the user inputs the original lyrics and is able to see hints for the next lyric
+  - login
+  	- page where user inputs there login info
+  - scores
+  	- page where scores are displayed
+
 - CSS
-	- style
-		- has most of the styling for the app such as placement, color, and text style
+  - style
+    - has most of the styling for the app such as placement, color, and text style
+
+
+
+# Demo Video
+
+https://drive.google.com/file/d/1DfA5aJy2cMfMqaA2e3GtK7Fy7ia1coZP/view?usp=sharing
