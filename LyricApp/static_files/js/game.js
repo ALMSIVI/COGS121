@@ -139,7 +139,8 @@ $(() => {
     if (inputArray[counter] == correctArray[counter]) {
       return 'All Correct so Far!';
     } else {
-      return 'Wrong word: ' + inputArray[counter];
+      const userInput = inputArray[counter] === '' ? '(empty)' : inputArray[counter];
+      return 'Wrong word: ' + userInput;
     }
   }
 

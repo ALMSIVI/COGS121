@@ -10,8 +10,8 @@ $(() => {
           title: $('#addform input[name=title]').val(),
           artist: $('#addform input[name=artist]').val(),
           language: $('#addform input[name=language]').val(),
-          oLyric: $('#addform input[name=original-lyric]').val(),
-          tLyric: $('#addform input[name=translated-lyric]').val(),
+          oLyric: $('#addform textarea[name=original-lyrics]').val(),
+          tLyric: $('#addform textarea[name=translated-lyrics]').val(),
         },
         success: (data) => {
           if (!data.status) {
